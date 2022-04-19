@@ -1,4 +1,4 @@
-#include "../../gtest/gtest.h"
+#include "../../../gtest/include/gtest/gtest.h"
 #include <stdio.h>
 
 #include "testExample.h"
