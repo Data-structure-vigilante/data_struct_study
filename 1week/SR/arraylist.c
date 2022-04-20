@@ -1,109 +1,109 @@
 #include "arraylist.h"
-#include <stdbool.h>
-#include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
 
-ArrayList *createArrayList(int maxElementCount) {
-	if (maxElementCount <= 0) {
-		return NULL;
+ArrayList *createArrayList(int maxElementCount)
+{
+	ArrayList *tmp;
+
+	if (maxElementCount <= 0)
+		return (NULL);
+	tmp = (ArrayList *)malloc(sizeof(ArrayList));
+	if (tmp == NULL)
+		return (NULL);
+	tmp->maxElementCount = maxElementCount;
+	tmp->currentElementCount = 0;
+	tmp->pElement = (ArrayListNode *)malloc(sizeof(ArrayListNode) * maxElementCount);
+	if (tmp->pElement == NULL)
+	{
+		free(tmp);
+		return (NULL);
 	}
-	ArrayList	*arry;
-	arry = (ArrayList*)calloc(1, sizeof(ArrayList));
-	if (arry == NULL) {
-		fprintf(stderr, "memory allocate failed\n");
-	}
-	arry->maxElementCount = maxElementCount;
-	arry->currentElementCount = 0;
-	arry->pElement = (ArrayListNode*)calloc(arry->maxElementCount, sizeof(ArrayListNode));
-	if (arry->pElement == NULL) {
-		fprintf(stderr, "memory allocate failed\n");
-	}
-	return arry;
+	return (tmp);
 }
-
-void deleteArrayList(ArrayList *pList) {
+void deleteArrayList(ArrayList *pList) // 댕글링포인터를 예방하기 위해서 이중포인터로 인자를 받을 수 있음.
+{
 	if (pList == NULL)
-		return;
-	
-	if (pList->pElement != NULL) {
+		return ;
+	if (pList->pElement != NULL)
+	{
 		free(pList->pElement);
 		pList->pElement = NULL;
 	}
 	free(pList);
 }
-
-// bool type이 아닌 이유
-int isArrayListFull(ArrayList *pList) {
-	if (pList->currentElementCount == pList->maxElementCount)
-		return true;
-	return false;
+int isArrayListFull(ArrayList *pList)
+{
+	return (pList->currentElementCount == pList->maxElementCount);
 }
+int addALElement(ArrayList *pList, int position, ArrayListNode element)
+{
+	int i;
+	int currentIndex = pList->currentElementCount - 1;
 
-int addALElement(ArrayList *pList, int position, ArrayListNode element) {
-	// position이 음수, 리스트가 full인 경우, ArrayList의 경우 논리적 순서와 물리적 저장 순서가 같다
-	if (position < 0 || 
-		position >= pList->maxElementCount ||
-		position > pList->currentElementCount + 1)
-		return false;
-	
-	if (position <= pList->currentElementCount - 1) {
-		for (int i=pList->currentElementCount;i>position;i--) {
-			pList->pElement[i].data = pList->pElement[i-1].data;
+	if (pList == NULL || pList->pElement == NULL)
+		return (-1);
+	if (isArrayListFull(pList))
+		return (-1);
+	if (position < 0 || position > currentIndex + 1)
+		return (-1);
+	if (position < pList->currentElementCount)
+	{
+		i = currentIndex;
+		while(i != position)
+		{
+			pList->pElement[i + 1] = pList->pElement[i];
+			i--;
 		}
 	}
-	pList->pElement[position].data = element.data;
+	pList->pElement[position] = element;
 	pList->currentElementCount++;
-	
-	return position;
+	return (position);
 }
+int removeALElement(ArrayList *pList, int position)
+{
+	int i;
+	int currentIndex = pList->currentElementCount - 1;
 
-int removeALElement(ArrayList *pList, int position) {
-	if (pList == NULL || pList->pElement == NULL)
-		return false;
-
-	if (position < 0 || position > pList->currentElementCount -1)
-		return false;
-
-	for (int i = position;i<pList->currentElementCount;i++) {
-		pList->pElement[i] = pList->pElement[i + 1];
-	}
-	pList->pElement[pList->currentElementCount-1].data = 0;
-	pList->currentElementCount--;
-	return 0;
-}
-
-ArrayListNode *getALElement(ArrayList *pList, int position) {
-	if (pList == NULL || pList->pElement == NULL)
-		return NULL;
-
-	if (position < 0 || position > pList->currentElementCount)
-		return NULL;
-
-	return &pList->pElement[position];
-}
-
-void displayArrayList(ArrayList *pList) {
-	if (pList == NULL || pList->pElement == NULL)
-		return;
-	
-	for (int i=0;i<pList->currentElementCount;i++)
-		printf("%d index element is : %d\n", i, pList->pElement[i].data);
-}
-
-void clearArrayList(ArrayList *pList) {
-	if (pList == NULL || pList->pElement == NULL)
-			return;
-
-	for (int i = 0; i < pList->currentElementCount; i++)
+	if (position < 0 || position > currentIndex)
+	i = position;
+	while (i < currentIndex)
 	{
-		pList->pElement[i].data = 0;
+		pList->pElement[i] = pList->pElement[i + 1];
+		
 	}
+	pList->pElement[i].data = 0;
+	pList->currentElementCount--;
+	return (position);
+}
+ArrayListNode *getALElement(ArrayList *pList, int position)
+{
+	int currentIndex;
+
+	if (pList == NULL || pList->pElement == NULL)
+		return (NULL);
+	currentIndex = pList->currentElementCount - 1;
+	if (position < 0 || position > currentIndex)
+		return (NULL);
+	return (&pList->pElement[position]);
+}
+void displayArrayList(ArrayList *pList)
+{
+	int i;
+	int currentIndex = pList->currentElementCount - 1;
+
+	i = 0;
+	while (i <= currentIndex)
+	{
+		printf("Index[%d] Data : %d\n", i, pList->pElement[i].data);
+		i++;
+	}
+}
+void clearArrayList(ArrayList *pList)
+{
 	pList->currentElementCount = 0;
 }
-
-int getArrayListLength(ArrayList *pList) {
-	if (pList == NULL || pList->pElement == NULL)
-			return false;
-
-	return pList->currentElementCount;
+int getArrayListLength(ArrayList *pList)
+{
+	return (pList->maxElementCount);
 }
