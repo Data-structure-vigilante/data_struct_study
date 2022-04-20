@@ -1,7 +1,7 @@
 NAME := main
 SRC := arraylist.c
 TEST_SRC := test.cc
-GTEST_DIR=../../gtest/
+GTEST_DIR=../../../gtest/
 all: ${NAME}
 
 test: ${SRC} ${TEST_SRC}
