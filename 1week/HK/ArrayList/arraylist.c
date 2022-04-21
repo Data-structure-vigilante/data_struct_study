@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   arraylist.cc                                       :+:      :+:    :+:   */
+/*   arraylist.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/18 10:22:18 by hekang            #+#    #+#             */
-/*   Updated: 2022/04/19 11:28:26 by hekang           ###   ########.fr       */
+/*   Updated: 2022/04/21 10:11:18 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,22 @@ ArrayList *createArrayList(int maxElementCount) {
 }
 
 void deleteArrayList(ArrayList *pList) {
+    if (!pList)
+        return;
     free(pList->pElement);
     free(pList);
 }
 
 int isArrayListFull(ArrayList *pList) {
+    if (!pList)
+        return FALSE;
     return pList->currentElementCount == pList->maxElementCount;
 }
 
 // Return : 성공 시 - index  값 리턴, 실패 시 -1 리턴
 // input : position > currentElementCount 면, 마지막에 추가
 int addALElement(ArrayList *pList, int position, ArrayListNode element) {
-    if (isArrayListFull(pList))
+    if (!pList || isArrayListFull(pList))
         return -1;
     int last_position = pList->currentElementCount - 1;
     ArrayListNode *array = pList->pElement;
@@ -58,6 +62,8 @@ int addALElement(ArrayList *pList, int position, ArrayListNode element) {
 }
 
 int removeALElement(ArrayList *pList, int position) {
+    if (!pList)
+        return -1;
     int last_position = pList->currentElementCount - 1;
     ArrayListNode *array = pList->pElement;
 
@@ -70,6 +76,8 @@ int removeALElement(ArrayList *pList, int position) {
 }
 
 ArrayListNode *getALElement(ArrayList *pList, int position) {
+    if (!pList)
+        return NULL;
     int last_position = pList->currentElementCount - 1;
     ArrayListNode *array = pList->pElement;
 
@@ -79,6 +87,8 @@ ArrayListNode *getALElement(ArrayList *pList, int position) {
 }
 
 void displayArrayList(ArrayList *pList) {
+    if (!pList)
+        return;
     ArrayListNode *array = pList->pElement;
     int last_position = pList->currentElementCount - 1;
 
@@ -86,6 +96,14 @@ void displayArrayList(ArrayList *pList) {
         printf("%dth element: %d\n", cur, array[cur].data);
 }
 
-void clearArrayList(ArrayList *pList) { pList->currentElementCount = 0; }
+void clearArrayList(ArrayList *pList) {
+    if (!pList)
+        return;
+    pList->currentElementCount = 0;
+}
 
-int getArrayListLength(ArrayList *pList) { return pList->currentElementCount; }
+int getArrayListLength(ArrayList *pList) {
+    if (!pList)
+        return -1;
+    return pList->currentElementCount;
+}

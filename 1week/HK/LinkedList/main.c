@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/18 10:22:29 by hekang            #+#    #+#             */
-/*   Updated: 2022/04/18 11:59:58 by hekang           ###   ########.fr       */
+/*   Updated: 2022/04/21 10:01:39 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 #include <stdio.h>
 
 int main() {
+    LinkedList *list2;
+    clearLinkedList(list2);
+
     LinkedList *list = createLinkedList();
     ListNode element;
     int position = 0;

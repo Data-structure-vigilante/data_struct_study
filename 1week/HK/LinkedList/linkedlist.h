@@ -8,8 +8,8 @@ typedef struct ListNodeType {
 } ListNode;
 
 typedef struct LinkedListType {
-    int currentElementCount; // ���� ����� ������ ����
-    ListNode headerNode; // ��� ���(Header Node)
+    int currentElementCount;
+    ListNode headerNode;
 } LinkedList;
 
 LinkedList *createLinkedList();

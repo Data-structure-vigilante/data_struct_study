@@ -55,6 +55,32 @@ ListNode *getLLElement(LinkedList *pList, int position) {
     return current;
 }
 
+void clearLinkedList(LinkedList *pList) {
+    ListNode *temp_element;
+    if (!pList)
+        return;
+    for (int count = 0; count < pList->currentElementCount; ++count) {
+        temp_element = pList->headerNode.pLink;
+        pList->headerNode.pLink = temp_element->pLink;
+        free(temp_element);
+    }
+    pList->headerNode.pLink = NULL;
+    pList->currentElementCount = 0;
+}
+
+int getLinkedListLength(LinkedList *pList) {
+    if (!pList)
+        return 0;
+    return pList->currentElementCount;
+}
+
+void deleteLinkedList(LinkedList *pList) {
+    if (!pList)
+        return;
+    clearLinkedList(pList);
+    free(pList);
+}
+
 static int isValidArg(LinkedList *pList, int position) {
     if (!pList || position < 0 || pList->currentElementCount < position)
         return FALSE;
