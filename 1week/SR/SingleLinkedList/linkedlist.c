@@ -38,16 +38,18 @@ int addLLElement(LinkedList *pList, int position, ListNode element) {
 }
 
 int removeLLElement(LinkedList *pList, int position) {
-	
 	ListNode* node;
 	ListNode* target;
 	int i;
+
 	if (pList == NULL)
 		return (-1);
 	if (position < 0)
 		return (-1);
+
 	i = 0;
 	node = &pList->headerNode;
+
 	while (i < position)
 	{
 		node = node->pLink;
@@ -80,18 +82,21 @@ void clearLinkedList(LinkedList *pList) {
 	if (pList == NULL)
 		return ;
 	node = pList->headerNode.pLink;
-	pList->headerNode.pLink = NULL;
 	while (node != NULL)
 	{
 		temp = node;
 		node = node->pLink;
 		free(temp);
 	}
+	pList->headerNode.pLink = NULL;
 	pList->currentElementCount = 0;
 }
 
 void printList(LinkedList *pList) {
 	ListNode* node;
+
+	if (pList == NULL)
+		return;
 
 	node = pList->headerNode.pLink;
 
@@ -110,6 +115,9 @@ int getLinkedListLength(LinkedList *pList)
 
 void deleteLinkedList(LinkedList *pList)
 {
+	if (pList == NULL)
+		return;
 	clearLinkedList(pList);
 	free(pList);
 }
+
