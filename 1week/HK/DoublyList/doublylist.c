@@ -1,7 +1,7 @@
 #include "doublylist.h"
+#include <stdio.h>
 #include <stdlib.h>
 
-static int isValidArg(DoublyList *pList, int position);
 DoublyList *createDoublyList() {
     DoublyList *list;
 
@@ -15,13 +15,18 @@ DoublyList *createDoublyList() {
     return list;
 }
 
-void deleteDoublyList(DoublyList *pList);
+void deleteDoublyList(DoublyList *pList) {
+    if (!pList)
+        return;
+    clearDoublyList(pList);
+    free(pList);
+}
 
 int addDLElement(DoublyList *pList, int position, DoublyListNode element) {
     DoublyListNode *new_node;
     DoublyListNode *current;
 
-    if (!isValidArg(pList, position)) {
+    if (!pList || position < 0 || pList->currentElementCount < position) {
         return -1;
     }
 
@@ -60,28 +65,25 @@ int removeDLElement(DoublyList *pList, int position) {
     target_node->pRLink->pLLink = target_node->pLLink;
     target_node->pLLink->pRLink = target_node->pRLink;
     free(target_node);
+    --pList->currentElementCount;
     return position;
 }
 
-// void clearDoublyList(DoublyList *pList) {
-//     DoublyListNode *temp_element;
+void clearDoublyList(DoublyList *pList) {
+    int result = 0;
+    while (result == 0) {
+        result = removeDLElement(pList, 0);
+    }
+}
 
-//     if (!pList)
-//         return;
-//     for (int count = 0; count < pList->currentElementCount; ++count) {
-//         temp_element = pList->headerNode.pRLink;
-//         pList->headerNode.pLink = temp_element->pLink;
-//         free(temp_element);
-//     }
-//     pList->headerNode.pLink = NULL;
-//     pList->currentElementCount = 0;
-// }
+int getDoublyListLength(DoublyList *pList) {
+    return pList->currentElementCount;
+}
 
-int getDoublyListLength(DoublyList *pList) {}
-void displayDoublyList(DoublyList *pList);
-
-static int isValidArg(DoublyList *pList, int position) {
-    if (!pList || position < 0 || pList->currentElementCount < position)
-        return FALSE;
-    return TRUE;
+void displayDoublyList(DoublyList *pList) {
+    if (!pList)
+        return;
+    for (int cur = 0; cur < pList->currentElementCount; ++cur) {
+        printf("%dth element: %d\n", cur, getDLElement(pList, cur)->data);
+    }
 }

@@ -137,44 +137,86 @@ TEST(remove, when_1elementListRemove0position_expect_0) {
     EXPECT_EQ(removeDLElement(list, 0), 0);
 }
 
-// TEST(clear, clear_llist) {
-//     DoublyList *list = createDoublyList();
-//     DoublyListNode element;
+TEST(remove, when_1elementListRemove0position_expect_elementCount0) {
+    DoublyList *list = createDoublyList();
 
-//     element.data = 2;
-//     element.pRLink = nullptr;
-//     addDLElement(list, 0, element);
-//     addDLElement(list, 0, element);
-//     addDLElement(list, 0, element);
-//     clearDoublyList(list);
-//     EXPECT_EQ(list->headerNode.pRLink, &list->headerNode);
-//     EXPECT_EQ(list->currentElementCount, 0);
-// }
+    DoublyListNode element;
+    element.data = 2;
+    element.pRLink = nullptr;
+    element.pLLink = nullptr;
+    addDLElement(list, 0, element);
+    removeDLElement(list, 0);
+    EXPECT_EQ(list->currentElementCount, 0);
+}
 
-// TEST(getLinkedListLength, when_emptylist_expect_zero) {
-//     DoublyList *list = createDoublyList();
+TEST(clear, clear_llist) {
+    DoublyList *list = createDoublyList();
+    DoublyListNode element;
 
-//     EXPECT_EQ(getLinkedListLength(list), 0);
-// }
+    element.data = 2;
+    element.pRLink = nullptr;
+    addDLElement(list, 0, element);
+    addDLElement(list, 0, element);
+    addDLElement(list, 0, element);
+    clearDoublyList(list);
+    EXPECT_EQ(list->headerNode.pRLink, &list->headerNode);
+    EXPECT_EQ(list->currentElementCount, 0);
+}
 
-// TEST(getLinkedListLength, when_threeElement_expect_zero) {
-//     DoublyList *list = createDoublyList();
-//     DoublyListNode element;
+TEST(getDoublyListLength, when_emptylist_expect_zero) {
+    DoublyList *list = createDoublyList();
 
-//     element.data = 2;
-//     element.pRLink = nullptr;
-//     addDLElement(list, 0, element);
-//     addDLElement(list, 0, element);
-//     addDLElement(list, 0, element);
-//     EXPECT_EQ(getLinkedListLength(list), 3);
-// }
+    EXPECT_EQ(getDoublyListLength(list), 0);
+}
 
-// TEST(deleteLinkedList, when_emptyList_expect_notNullptr) {
-//     DoublyList *list = createDoublyList();
+TEST(getDoublyListLength, when_threeElement_expect_zero) {
+    DoublyList *list = createDoublyList();
+    DoublyListNode element;
 
-//     deleteLinkedList(list);
-//     EXPECT_NE(list, nullptr);
-// }
+    element.data = 2;
+    element.pRLink = nullptr;
+    addDLElement(list, 0, element);
+    addDLElement(list, 0, element);
+    addDLElement(list, 0, element);
+    EXPECT_EQ(getDoublyListLength(list), 3);
+}
+
+TEST(deleteDoublyList, when_emptyList_expect_notNullptr) {
+    DoublyList *list = createDoublyList();
+
+    deleteDoublyList(list);
+    EXPECT_NE(list, nullptr);
+}
+TEST(displayDoublyList, when_emptyList_expect_nonPrint) {
+    DoublyList *list = createDoublyList();
+    ::testing::internal::CaptureStdout();
+    displayDoublyList(list);
+    std::string capturedStdout =
+        ::testing::internal::GetCapturedStdout().c_str();
+    EXPECT_STREQ("", capturedStdout.c_str());
+}
+
+TEST(displayDoublyList, when_list_expect_print) {
+    DoublyList *list = createDoublyList();
+    DoublyListNode element;
+    int position = 0;
+
+    element.data = 2;
+    element.pRLink = nullptr;
+    addDLElement(list, 0, element);
+    element.data = 1;
+    addDLElement(list, 0, element);
+    element.data = 0;
+    addDLElement(list, 0, element);
+
+    ::testing::internal::CaptureStdout();
+    displayDoublyList(list);
+    std::string capturedStdout =
+        ::testing::internal::GetCapturedStdout().c_str();
+
+    std::string str = "0th element: 0\n1th element: 1\n2th element: 2\n";
+    EXPECT_STREQ(str.c_str(), capturedStdout.c_str());
+};
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
