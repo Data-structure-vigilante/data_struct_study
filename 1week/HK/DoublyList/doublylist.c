@@ -37,6 +37,7 @@ int addDLElement(DoublyList *pList, int position, DoublyListNode element) {
     ++pList->currentElementCount;
     return position;
 }
+
 int removeDLElement(DoublyList *pList, int position);
 void clearDoublyList(DoublyList *pList);
 int getDoublyListLength(DoublyList *pList);
