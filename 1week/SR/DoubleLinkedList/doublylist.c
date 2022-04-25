@@ -34,10 +34,10 @@ int addDLElement(DoublyList *pList, int position, DoublyListNode element)
 		fprintf(stderr, "memory allocate failed");
 		return (-1);
 	}
+	currentIndex = pList->currentElementCount - 1;
 	if (position < 0 || position > currentIndex + 1)
 		return (-1);
 
-	currentIndex = pList->currentElementCount - 1;
 	curr = &pList->headerNode;
 
 	for (int i = 0; i <= position; ++i)
@@ -48,6 +48,7 @@ int addDLElement(DoublyList *pList, int position, DoublyListNode element)
 	curr->pRLink->pRLink = next;
 	curr->pRLink->pLLink = curr;
 	next->pLLink = curr->pRLink;
+	++pList->currentElementCount;
 	return (position);
 }
 int removeDLElement(DoublyList *pList, int position)
@@ -70,6 +71,7 @@ int removeDLElement(DoublyList *pList, int position)
 		curr = curr->pRLink;
 	curr->pLLink->pRLink = curr->pRLink;
 	curr->pRLink->pLLink = curr->pLLink;
+	--pList->currentElementCount;
 	free(curr);
 }
 void clearDoublyList(DoublyList *pList)
@@ -93,6 +95,7 @@ void clearDoublyList(DoublyList *pList)
 	}
 	curr->pRLink = curr;
 	curr->pLLink = curr;
+	pList->currentElementCount = 0;
 }
 int getDoublyListLength(DoublyList *pList)
 {
