@@ -43,6 +43,46 @@ TEST(add, overflow_index_empty_list) {
     EXPECT_EQ(addLLElement(list, position, element), -1);
 };
 
+TEST(removeLLElement, when_emptyList_expect_minus1) {
+    LinkedList *list = createLinkedList();
+
+    EXPECT_EQ(removeLLElement(list, 0), -1);
+}
+
+TEST(removeLLElement, when_nullptr_expect_minus1) {
+    EXPECT_EQ(removeLLElement(nullptr, 0), -1);
+}
+
+TEST(removeLLElement, when_oneElement_expect_position) {
+    LinkedList *list = createLinkedList();
+    ListNode element;
+
+    element.data = 1;
+    element.pLink = nullptr;
+
+    addLLElement(list, 0, element);
+    EXPECT_EQ(removeLLElement(list, 0), 0);
+    EXPECT_EQ(list->currentElementCount, 0);
+}
+
+TEST(removeLLElement, when_ManyElementRemoveMiddlePosition_expect_position) {
+    LinkedList *list = createLinkedList();
+    ListNode element;
+
+    element.pLink = nullptr;
+    element.data = 0;
+    addLLElement(list, 0, element);
+    element.data = 1;
+    addLLElement(list, 0, element);
+    element.data = 2;
+    addLLElement(list, 0, element);
+
+    EXPECT_EQ(removeLLElement(list, 1), 1);
+    EXPECT_EQ(list->currentElementCount, 2);
+    EXPECT_EQ(list->headerNode.pLink->pLink->data, 0);
+    EXPECT_EQ(list->headerNode.pLink->data, 2);
+}
+
 TEST(get, zero_index_empty_list) {
     LinkedList *list = createLinkedList();
 

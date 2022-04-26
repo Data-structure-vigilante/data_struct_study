@@ -43,6 +43,23 @@ int addLLElement(LinkedList *pList, int position, ListNode element) {
     return position;
 };
 
+int removeLLElement(LinkedList *pList, int position) {
+    if (!pList || position < 0 || pList->currentElementCount < position + 1)
+        return -1;
+
+    ListNode *prev_node = getLLElement(pList, position - 1);
+    ListNode *target_node;
+
+    if (!prev_node) {
+        prev_node = &pList->headerNode;
+    }
+    target_node = prev_node->pLink;
+    prev_node->pLink = prev_node->pLink->pLink;
+    free(target_node);
+    --pList->currentElementCount;
+    return position;
+}
+
 ListNode *getLLElement(LinkedList *pList, int position) {
     ListNode *current;
 
