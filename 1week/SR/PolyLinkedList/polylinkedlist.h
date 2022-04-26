@@ -16,7 +16,7 @@ typedef struct PolyListType
 } PolyList;
 
 PolyList *createPolyList();
-int addPLElement(PolyList *pList, int position, PolyListNode element);
+int addPLElement(PolyList *pList, PolyListNode element);
 int removePLElement(PolyList *pList, int position);
 PolyListNode *getPLElement(PolyList *pList, int position);
 

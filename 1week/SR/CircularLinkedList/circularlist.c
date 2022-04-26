@@ -42,7 +42,7 @@ int addCLElement(CircularList* pList, int position, CircularListNode element) {
 	
 	curr = &pList->headerNode;
 
-	for (int i=0;i<=position;++i)
+	for (int i=0;i<position;++i)
 		curr = curr->pRLink;
 	next = curr->pRLink;
 	curr->pRLink = (CircularListNode*)calloc(1, sizeof(CircularListNode));
@@ -148,14 +148,20 @@ void displayCircularList(CircularList* pList) {
 	}
 }
 
-int main(void) {
-	CircularList* list;
+// int main(void) {
+// 	CircularList* list;
 
-	list = createCircularList();
+// 	list = createCircularList();
 
-	for (int i=0;i<10;i++) {
-		CircularListNode temp={i, NULL, NULL};
-		addCLElement(list, i, temp);
-	}
-	displayCircularList(list);
-}
+// 	for (int i=0;i<10;i++) {
+// 		CircularListNode temp={i, NULL, NULL};
+// 		addCLElement(list, i, temp);
+// 	}
+// 	displayCircularList(list);
+// 	removeCLElement(list, 4);
+// 	printf("\n");
+// 	displayCircularList(list);
+// 	removeCLElement(list, 4);
+// 	printf("\n");
+// 	displayCircularList(list);
+// }

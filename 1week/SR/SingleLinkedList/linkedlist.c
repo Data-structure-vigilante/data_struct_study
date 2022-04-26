@@ -44,7 +44,7 @@ int removeLLElement(LinkedList *pList, int position) {
 
 	if (pList == NULL)
 		return (-1);
-	if (position < 0)
+	if (position < 0 || position > pList->currentElementCount-1)
 		return (-1);
 
 	i = 0;

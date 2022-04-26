@@ -13,7 +13,7 @@ PolyList *createPolyList()
 	return temp;
 }
 
-int addPLElement(PolyList *pList, int position, PolyListNode element)
+int addPLElement(PolyList *pList, PolyListNode element)
 {
 	PolyListNode *node;
 	PolyListNode *next;
@@ -21,18 +21,19 @@ int addPLElement(PolyList *pList, int position, PolyListNode element)
 	if (pList == NULL)
 		return (-1);
 
-	if (position < 0 || pList->currentElementCount < position)
-		return (-1);
-
 	node = &pList->headerNode;
-	for (int i = 0; i < position; i++)
-	{
+	while(node->pLink != NULL) {
+		if (node->pLink->degree == element.degree) {
+			node->pLink->coef += element.coef;
+			return (0);
+		}
+		else if (node->pLink->degree < element.degree)
+			break;
 		node = node->pLink;
 	}
-	next = (PolyListNode *)node->pLink;
-	node->pLink = (PolyListNode *)calloc(1, sizeof(PolyListNode));
-	if (node->pLink == NULL)
-	{
+	next = (PolyListNode*)node->pLink;
+	node->pLink = (PolyListNode*)calloc(1, sizeof(PolyListNode));
+	if (node->pLink == NULL) {
 		fprintf(stderr, "memory allocate failed\n");
 		return (-1);
 	}
@@ -55,7 +56,7 @@ int addPolyNodeLast(PolyList *pList, float coef, int degree)
 	if (pList != NULL)
 	{
 		int length = getPolyListLength(pList);
-		ret = addPLElement(pList, length, node);
+		ret = addPLElement(pList, node);
 	}
 	return (ret);
 }
@@ -193,24 +194,25 @@ void deletePolyList(PolyList *pList)
 	free(pList);
 }
 
-/*int main()
+int main()
 {
 	PolyList *listA;
-	PolyList *listB;
-	PolyList *listC;
 
 	listA = createPolyList();
-	for (int i = 15; i > 0; i -= 7)
-	{
-		addPolyNodeLast(listA, i, i);
+	for (int i=0;i<10;i+=2) {
+		PolyListNode temp = {i, i, NULL};
+		addPLElement(listA, temp);
 	}
-	// printList(listA);
-	listB = createPolyList();
-	for (int i = 6; i > 0; i -= 2)
-	{
-		addPolyNodeLast(listB, i, i);
+	printList(listA);
+	putc('\n', stdout);
+	for (int i=1;i<=9;i+=2) {
+		PolyListNode temp = {i, i, NULL};
+		addPLElement(listA, temp);
 	}
-	// printList(listB);
-	listC = sumPolyList(listA, listB);
-	printList(listC);
-}*/
+	{
+		PolyListNode temp = {1, 9, NULL};
+		addPLElement(listA, temp);
+	}
+	printList(listA);
+	deletePolyList(listA);
+}
