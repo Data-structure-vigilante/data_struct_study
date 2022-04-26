@@ -8,6 +8,8 @@ static int isValidArg(CircularList *pList, int position);
 static void addNodeToFirstPosition(CircularList *pList, ListNode *new_node);
 static void addNodeToNotFirstPosition(CircularList *pList, ListNode *new_node,
                                       int position);
+static void removeFirstNode(CircularList *pList);
+static void removeNotFirstNode(CircularList *pList, int position);
 
 CircularList *createCircularList() {
     CircularList *list;
@@ -47,7 +49,7 @@ static void addNodeToFirstPosition(CircularList *pList, ListNode *new_node) {
         pList->headerNode.pLink = new_node;
         new_node->pLink = new_node;
     } else {
-        last_element = getCLElement(pList, pList->currentElementCount);
+        last_element = getCLElement(pList, pList->currentElementCount - 1);
         last_element->pLink = new_node;
         new_node->pLink = pList->headerNode.pLink;
         pList->headerNode.pLink = new_node;
@@ -69,27 +71,38 @@ int removeCLElement(CircularList *pList, int position) {
     if (!pList || position < 0 || pList->currentElementCount < position + 1)
         return -1;
 
-    ListNode *prev_node = getCLElement(pList, position - 1);
-    ListNode *target_node;
-
-    if (!prev_node) {
-        prev_node = &pList->headerNode;
+    if (position == 0) {
+        removeFirstNode(pList);
+    } else {
+        removeNotFirstNode(pList, position);
     }
-    target_node = prev_node->pLink;
-    prev_node->pLink = prev_node->pLink->pLink;
-    free(target_node);
     --pList->currentElementCount;
     return position;
 }
+
 static void removeFirstNode(CircularList *pList) {
+    ListNode *target_node;
+    ListNode *last_node;
+
     if (pList->currentElementCount == 1) {
         free(pList->headerNode.pLink);
         pList->headerNode.pLink = NULL;
     } else {
-        
+        last_node = getCLElement(pList, pList->currentElementCount - 1);
+        target_node = pList->headerNode.pLink;
+        pList->headerNode.pLink = target_node->pLink;
+        free(target_node);
+        last_node->pLink = pList->headerNode.pLink;
     }
 }
-static void removeNotFirstNode(CircularList *pList, int position) {}
+static void removeNotFirstNode(CircularList *pList, int position) {
+    ListNode *prev_node = getCLElement(pList, position - 1);
+    ListNode *target_node;
+
+    target_node = prev_node->pLink;
+    prev_node->pLink = prev_node->pLink->pLink;
+    free(target_node);
+}
 
 ListNode *getCLElement(CircularList *pList, int position) {
     ListNode *current;
