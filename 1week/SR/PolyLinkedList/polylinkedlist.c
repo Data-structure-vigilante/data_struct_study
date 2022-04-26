@@ -43,7 +43,7 @@ int addPLElement(PolyList *pList, PolyListNode element)
 	return (0);
 }
 
-int addPolyNodeLast(PolyList *pList, float coef, int degree)
+static int addPolyNodeLast(PolyList *pList, float coef, int degree)
 {
 	int ret = FALSE, i = 0;
 
@@ -85,7 +85,7 @@ PolyList *sumPolyList(PolyList *listA, PolyList *listB)
 		else if (currA->degree == currB->degree)
 		{
 			temp.coef = currA->coef + currB->coef;
-			temp.degree = currA->degree + currB->degree;
+			temp.degree = currA->degree;
 			currA = currA->pLink;
 			currB = currB->pLink;
 		}

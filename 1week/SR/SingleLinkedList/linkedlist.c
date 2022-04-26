@@ -2,18 +2,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-LinkedList *createLinkedList() {
-	LinkedList*	temp;
+LinkedList *createLinkedList()
+{
+	LinkedList *temp;
 
-	temp = (LinkedList*)calloc(1, sizeof(LinkedList));
+	temp = (LinkedList *)calloc(1, sizeof(LinkedList));
 	if (temp == NULL)
 		fprintf(stderr, "memory allocate failed\n");
 	return temp;
 }
 
-int addLLElement(LinkedList *pList, int position, ListNode element) {
-	ListNode*	node;
-	ListNode*	next;
+int addLLElement(LinkedList *pList, int position, ListNode element)
+{
+	ListNode *node;
+	ListNode *next;
 
 	if (pList == NULL)
 		return (-1);
@@ -22,12 +24,14 @@ int addLLElement(LinkedList *pList, int position, ListNode element) {
 		return (-1);
 
 	node = &pList->headerNode;
-	for (int i=0;i<position;i++) {
+	for (int i = 0; i < position; i++)
+	{
 		node = node->pLink;
 	}
-	next = (ListNode*)node->pLink;
-	node->pLink = (ListNode*)calloc(1, sizeof(ListNode));
-	if (node->pLink == NULL) {
+	next = (ListNode *)node->pLink;
+	node->pLink = (ListNode *)calloc(1, sizeof(ListNode));
+	if (node->pLink == NULL)
+	{
 		fprintf(stderr, "memory allocate failed\n");
 		return (-1);
 	}
@@ -37,9 +41,10 @@ int addLLElement(LinkedList *pList, int position, ListNode element) {
 	return (0);
 }
 
-int removeLLElement(LinkedList *pList, int position) {
-	ListNode* node;
-	ListNode* target;
+int removeLLElement(LinkedList *pList, int position)
+{
+	ListNode *node;
+	ListNode *target;
 	int i;
 
 	if (pList == NULL)
@@ -62,9 +67,10 @@ int removeLLElement(LinkedList *pList, int position) {
 	return (0);
 }
 
-ListNode *getLLElement(LinkedList *pList, int position) {
+ListNode *getLLElement(LinkedList *pList, int position)
+{
 	ListNode *node;
-	
+
 	if (pList == NULL)
 		return (NULL);
 	if (position < 0)
@@ -75,12 +81,13 @@ ListNode *getLLElement(LinkedList *pList, int position) {
 	return (node->pLink);
 }
 
-void clearLinkedList(LinkedList *pList) {
+void clearLinkedList(LinkedList *pList)
+{
 	ListNode *node;
 	ListNode *temp;
 
 	if (pList == NULL)
-		return ;
+		return;
 	node = pList->headerNode.pLink;
 	while (node != NULL)
 	{
@@ -92,15 +99,17 @@ void clearLinkedList(LinkedList *pList) {
 	pList->currentElementCount = 0;
 }
 
-void printList(LinkedList *pList) {
-	ListNode* node;
+void printList(LinkedList *pList)
+{
+	ListNode *node;
 
 	if (pList == NULL)
 		return;
 
 	node = pList->headerNode.pLink;
 
-	while (node != NULL) {
+	while (node != NULL)
+	{
 		printf("result : %d\n", node->data);
 		node = node->pLink;
 	}
@@ -121,3 +130,20 @@ void deleteLinkedList(LinkedList *pList)
 	free(pList);
 }
 
+void reverseLinkedList(LinkedList *pList)
+{
+	ListNode *pNode = NULL, *pCurrentNode = NULL, *pPrevNode = NULL;
+
+	if (pList != NULL)
+	{
+		pNode = pList->headerNode.pLink;
+		while (pNode != NULL)
+		{
+			pPrevNode = pCurrentNode;
+			pCurrentNode = pNode;
+			pNode = pNode->pLink;
+			pCurrentNode->pLink = pPrevNode;
+		}
+		pList->headerNode.pLink = pCurrentNode;
+	}
+}

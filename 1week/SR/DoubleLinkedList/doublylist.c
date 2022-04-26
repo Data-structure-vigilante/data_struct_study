@@ -39,8 +39,7 @@ int addDLElement(DoublyList *pList, int position, DoublyListNode element)
 		return (-1);
 
 	curr = &pList->headerNode;
-
-	for (int i = 0; i <= position; ++i)
+	for (int i = 0; i < position; ++i)
 		curr = curr->pRLink;
 	next = curr->pRLink;
 	curr->pRLink = (DoublyListNode *)calloc(1, sizeof(DoublyListNode));
@@ -145,4 +144,44 @@ void displayDoublyList(DoublyList *pList)
 		printf("Index : [%d], Data : [%d]\n", cnt++, curr->data);
 		curr = curr->pRLink;
 	}
+}
+
+void reverseLinkedList(DoublyList *pList)
+{
+
+	DoublyListNode *pNode = NULL, *pCurrentNode, *pPrevNode = NULL;
+	DoublyListNode *head;
+
+	if (pList != NULL)
+	{
+		pCurrentNode = &pList->headerNode;
+		pNode = pList->headerNode.pRLink;
+		pList->headerNode.pLLink = pNode;
+		while (pNode != &pList->headerNode)
+		{
+			pPrevNode = pCurrentNode;
+			pCurrentNode = pNode;
+			pNode = pNode->pRLink;
+			pCurrentNode->pRLink = pPrevNode;
+			pCurrentNode->pLLink = pNode;
+		}
+
+		pList->headerNode.pRLink = pCurrentNode;
+	}
+}
+
+int main()
+{
+	DoublyList *temp = createDoublyList();
+	for (int i = 0; i < 20; ++i)
+	{
+		DoublyListNode elem = {i, 0, 0};
+		addDLElement(temp, i, elem);
+	}
+	displayDoublyList(temp);
+	printf("------------------\n");
+	reverseLinkedList(temp);
+	printf("reverse\n");
+	displayDoublyList(temp);
+	return (0);
 }
