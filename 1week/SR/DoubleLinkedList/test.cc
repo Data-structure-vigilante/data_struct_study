@@ -2,33 +2,50 @@
 #include "doublylist.h"
 #include <stdio.h>
 
-DoublyList *pList = createDoublyList();
-
-TEST(create, pos) { EXPECT_NE(createDoublyList(), nullptr); };
-DoDoublyListNode tmp2;
-TEST(add, over)
+TEST(addDLElement, DoublyList)
 {
-	EXPECT_EQ(addDLElement(pList, 1, tmp), -1);
-};
-TEST(add, 0) { EXPECT_EQ(addDLElement(pList, 0, tmp), 0); };
-TEST(add, 1) { EXPECT_EQ(addDLElement(pList, 1, tmp), 1); };
-TEST(add, 2) { EXPECT_EQ(addDLElement(pList, 2, tmp), 2); };
-TEST(add, re1) { EXPECT_EQ(addDLElement(pList, 1, tmp), 1); };
-TEST(add, null) { EXPECT_EQ(addDLElement(nullptr, 5, tmp), -1); };
+	DoublyList *arr;
 
-TEST(remove, pos)
+	arr = createDoublyList(20);
+	for (int i = 0; i < 20; ++i)
+	{
+		DoublyListNode elem = {i + 1};
+		EXPECT_EQ(addDLElement(arr, i, elem), i);
+	}
+	DoublyListNode elem = {1};
+	EXPECT_EQ(addDLElement(arr, 20, elem), -1);
+	EXPECT_EQ(addDLElement(nullptr, 2, elem), -1);
+}
+
+TEST(removeDLElement, DoublyList)
 {
-	EXPECT_EQ(removeDLElement(pList, 0), 0);
-};
-TEST(remove, neg) { EXPECT_EQ(removeDLElement(pList, -5), -1); };
-TEST(remove, null) { EXPECT_EQ(removeDLElement(nullptr, 4), -1); };
-TEST(length, 3) { EXPECT_EQ(getDoublyListLength(pList), 3); };
-TEST(get, pos) { EXPECT_NE(getDLElement(pList, 3), nullptr); };
-TEST(get, neg) { EXPECT_EQ(getDLElement(pList, -10), nullptr); };
-TEST(get, null) { EXPECT_EQ(getDLElement(nullptr, 5), nullptr); };
+	DoublyList *arr = createDoublyList(100);
+	for (int i = 0; i < 50; ++i)
+	{
+		DoublyListNode elem = {i + 1};
+		addDLE'lement(arr, i, elem);
+	}
+	EXPECT_EQ(removeDLElement(arr, 25), 25);
+	EXPECT_EQ(arr->currentElementCount, 49);
+	EXPECT_EQ(removeDLElement(arr, 500), -1);
+	EXPECT_EQ(arr->currentElementCount, 49);
+	EXPECT_EQ(removeDLElement(nullptr, 10), -1);
+}
+
+TEST(getDLElement, DoublyList)
+{
+	DoublyList *arr = createDoublyList(10);
+	for (int i = 0; i < 10; ++i)
+	{
+		DoublyListNode elem = {i};
+		addDLElement(arr, i, elem);
+	}
+	EXPECT_EQ(getDLElement(arr, 5)->data, 5);
+}
 
 int main(int argc, char **argv)
 {
 	::testing::InitGoogleTest(&argc, argv);
 	return RUN_ALL_TESTS();
 }
+createDoublyList

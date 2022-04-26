@@ -50,9 +50,9 @@ int addALElement(ArrayList *pList, int position, ArrayListNode element)
 		return (-1);
 	if (isArrayListFull(pList))
 		return (-1);
+	currentIndex = pList->currentElementCount - 1;
 	if (position < 0 || position > currentIndex + 1)
 		return (-1);
-	currentIndex = pList->currentElementCount - 1;
 
 	if (position < pList->currentElementCount)
 	{
@@ -75,10 +75,10 @@ int removeALElement(ArrayList *pList, int position)
 
 	if (pList == NULL || pList->pElement == NULL)
 		return (-1);
+	currentIndex = pList->currentElementCount - 1;
 	if (position < 0 || position > currentIndex)
 		return (-1);
 	i = position;
-	currentIndex = pList->currentElementCount - 1;
 	while (i < currentIndex)
 	{
 		pList->pElement[i] = pList->pElement[i + 1];
