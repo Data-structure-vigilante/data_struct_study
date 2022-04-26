@@ -73,6 +73,7 @@ int removeDLElement(DoublyList *pList, int position)
 	curr->pRLink->pLLink = curr->pLLink;
 	--pList->currentElementCount;
 	free(curr);
+	return (position);
 }
 void clearDoublyList(DoublyList *pList)
 {
@@ -82,7 +83,7 @@ void clearDoublyList(DoublyList *pList)
 	if (pList == NULL)
 	{
 		fprintf(stderr, "NULL pointer detected");
-		return (-1);
+		return;
 	}
 
 	curr = pList->headerNode.pRLink;

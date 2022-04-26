@@ -25,7 +25,7 @@ ArrayList *createArrayList(int maxElementCount)
 void deleteArrayList(ArrayList *pList) // 댕글링포인터를 예방하기 위해서 이중포인터로 인자를 받을 수 있음.
 {
 	if (pList == NULL)
-		return ;
+		return;
 	if (pList->pElement != NULL)
 	{
 		free(pList->pElement);
@@ -57,7 +57,7 @@ int addALElement(ArrayList *pList, int position, ArrayListNode element)
 	if (position < pList->currentElementCount)
 	{
 		i = currentIndex;
-		while(i != position)
+		while (i != position)
 		{
 			pList->pElement[i + 1] = pList->pElement[i];
 			i--;
@@ -76,7 +76,8 @@ int removeALElement(ArrayList *pList, int position)
 	if (pList == NULL || pList->pElement == NULL)
 		return (-1);
 	if (position < 0 || position > currentIndex)
-		i = position;
+		return (-1);
+	i = position;
 	currentIndex = pList->currentElementCount - 1;
 	while (i < currentIndex)
 	{

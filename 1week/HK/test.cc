@@ -1,4 +1,4 @@
-#include "../../gtest/include/gtest/gtest.h"
+#include <gtest/gtest.h>
 #include "arraylist.h"
 #include <stdio.h>
 
