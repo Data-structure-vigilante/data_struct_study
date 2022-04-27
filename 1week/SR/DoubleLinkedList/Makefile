@@ -1,5 +1,5 @@
 NAME := main
-SRC := arraylist.c
+SRC := doublylist.c
 TEST_SRC := test.cc
 GTEST_DIR=../../gtest/
 all: ${NAME}
@@ -9,7 +9,7 @@ test: ${SRC} ${TEST_SRC}
 	./test
 	rm test
 
-${NAME}: main.c arraylist.c
+${NAME}: main.c doublylist.c
 	gcc -fdiagnostics-color=always -g *.c -o main
 
 .PHONY: all test
