@@ -1,7 +1,7 @@
 NAME := main
-SRC := arraylist.c
+SRC := polinomial.c
 TEST_SRC := test.cc
-GTEST_DIR=../../gtest/
+GTEST_DIR=../../../gtest/
 all: ${NAME}
 
 test: ${SRC} ${TEST_SRC}
@@ -9,7 +9,7 @@ test: ${SRC} ${TEST_SRC}
 	./test
 	rm test
 
-${NAME}: main.c arraylist.c
+${NAME}: main.c ${SRC}
 	gcc -fdiagnostics-color=always -g *.c -o main
 
 .PHONY: all test
