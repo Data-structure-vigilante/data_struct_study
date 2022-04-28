@@ -2,6 +2,7 @@ NAME := main
 SRC := arraystack.c
 TEST_SRC := test.cc
 GTEST_DIR=../../gtest/
+
 all: ${NAME}
 
 test: ${SRC} ${TEST_SRC}
