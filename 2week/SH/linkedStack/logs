@@ -1,0 +1,23 @@
+Process:         test [17325]
+Path:            /Users/USER/Documents/*/test
+Load Address:    0x10da2f000
+Identifier:      test
+Version:         ???
+Code Type:       X86-64
+Platform:        macOS
+Parent Process:  make [17317]
+
+Date/Time:       2022-04-28 11:48:14.046 +0900
+Launch Time:     2022-04-28 11:48:13.715 +0900
+OS Version:      macOS 12.3.1 (21E258)
+Report Version:  7
+Analysis Tool:   /usr/bin/leaks
+
+Physical footprint:         404K
+Physical footprint (peak):  404K
+----
+
+leaks Report Version: 4.0
+Process 17325: 237 nodes malloced for 19 KB
+Process 17325: 0 leaks for 0 total leaked bytes.
+

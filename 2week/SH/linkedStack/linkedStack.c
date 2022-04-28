@@ -6,30 +6,50 @@ int removeLLElement(LinkedStack *pStack, int position);
 StackNode *getLLElement(LinkedStack *pStack, int position);
 void clearLinkedStack(LinkedStack *pStack);
 int getLinkedStackLength(LinkedStack *pStack);
-void deleteLinkedStack(LinkedStack *pStack);
+void deleteLinkedList(LinkedStack *pStack);
 
-LinkedStack* createLinkedStack() {
-	LinkedStack *stack;
+LinkedStack *createLinkedStack() {
+    LinkedStack *stack;
 
-	stack = (LinkedStack*)calloc(1, sizeof(LinkedStack));
-	return stack;
+    stack = (LinkedStack *)calloc(1, sizeof(LinkedStack));
+    return stack;
 }
 
-int pushLS(LinkedStack* pStack, StackNode element) {
-	if (pStack == NULL)
-		return ERROR;
-	return addLLElement(pStack, pStack->currentElementCount, element);
+int pushLS(LinkedStack *pStack, StackNode element) {
+    if (pStack == NULL)
+        return ERROR;
+    return addLLElement(pStack, pStack->currentElementCount, element);
 }
 
-StackNode* popLS(LinkedStack* pStack) {
+StackNode *popLS(LinkedStack *pStack) {
+    if (pStack == NULL || pStack->currentElementCount == 0)
+        return NULL;
 
+    StackNode *current;
+    StackNode *prev;
+
+    current = pStack->pTopElement;
+    while (current->pLink != NULL) {
+        prev = current;
+        current = current->pLink;
+    }
+    prev->pLink = NULL;
+    --pStack->currentElementCount;
+    return current;
 }
-StackNode* peekLS(LinkedStack* pStack);
 
-void deleteLinkedStack(LinkedStack* pStack) {
-
+StackNode *peekLS(LinkedStack *pStack) {
+    if (pStack == NULL || pStack->currentElementCount == 0)
+        return NULL;
+    return getLLElement(pStack, pStack->currentElementCount);
 }
-int isLinkedStackEmpty(LinkedStack* pStack);
+
+void deleteLinkedStack(LinkedStack *pStack) { deleteLinkedList(pStack); }
+int isLinkedStackEmpty(LinkedStack *pStack) {
+    if (pStack == NULL)
+        return ERROR;
+    return pStack->currentElementCount == 0;
+}
 
 // list
 
@@ -44,61 +64,45 @@ int addLLElement(LinkedStack *pStack, int position, StackNode element) {
 
     new_node = (StackNode *)calloc(1, sizeof(StackNode));
     *new_node = element;
-	new_node->pLink = NULL;
-	if (pStack->currentElementCount == 0) {
-		pStack->pTopElement = new_node;
-	}
-	else {
-		current = pStack->pTopElement;
-		while (current->pLink != NULL)
-			current = current->pLink;
-		current->pLink = new_node;
-	}
+    new_node->pLink = NULL;
+    if (pStack->currentElementCount == 0) {
+        pStack->pTopElement = new_node;
+    } else {
+        current = pStack->pTopElement;
+        while (current->pLink != NULL)
+            current = current->pLink;
+        current->pLink = new_node;
+    }
     ++pStack->currentElementCount;
     return position;
 };
 
-// int removeLLElement(LinkedStack *pStack, int position) {
-//     if (!pStack || position < 0 || pStack->currentElementCount < position + 1)
-//         return -1;
+StackNode *getLLElement(LinkedStack *pStack, int position) {
+    StackNode *current;
 
-//     StackNode *prev_node = getLLElement(pStack, position - 1);
-//     StackNode *target_node;
+    if (!isValidArg(pStack, position))
+        return NULL;
+    current = pStack->pTopElement;
+    while (current->pLink != NULL)
+        current = current->pLink;
+    return current;
+}
 
-//     if (!prev_node) {
-//         prev_node = &pStack->pTopElement;
-//     }
-//     target_node = prev_node->pLink;
-//     prev_node->pLink = prev_node->pLink->pLink;
-//     free(target_node);
-//     --pStack->currentElementCount;
-//     return position;
-// }
+void clearLinkedStack(LinkedStack *pStack) {
+    StackNode *temp_element;
+    StackNode *current;
 
-// StackNode *getLLElement(LinkedStack *pStack, int position) {
-//     StackNode *current;
-
-//     if (!isValidArg(pStack, position))
-//         return NULL;
-//     current = &pStack->pTopElement;
-//     for (int count = 0; count < position + 1; ++count) {
-//         current = current->pLink;
-//     }
-//     return current;
-// }
-
-// void clearLinkedStack(LinkedStack *pStack) {
-//     StackNode *temp_element;
-//     if (!pStack)
-//         return;
-//     for (int count = 0; count < pStack->currentElementCount; ++count) {
-//         temp_element = pStack->pTopElement.pLink;
-//         pStack->pTopElement.pLink = temp_element->pLink;
-//         free(temp_element);
-//     }
-//     pStack->pTopElement.pLink = NULL;
-//     pStack->currentElementCount = 0;
-// }
+    if (!pStack)
+        return;
+    current = pStack->pTopElement;
+    while (current != NULL) {
+        temp_element = current;
+        current = current->pLink;
+        free(temp_element);
+    }
+    pStack->pTopElement = NULL;
+    pStack->currentElementCount = 0;
+}
 
 // int getLinkedStackLength(LinkedStack *pStack) {
 //     if (!pStack)
@@ -106,12 +110,12 @@ int addLLElement(LinkedStack *pStack, int position, StackNode element) {
 //     return pStack->currentElementCount;
 // }
 
-// void deleteLinkedStack(LinkedStack *pStack) {
-//     if (!pStack)
-//         return;
-//     clearLinkedStack(pStack);
-//     free(pStack);
-// }
+void deleteLinkedList(LinkedStack *pStack) {
+    if (!pStack)
+        return;
+    clearLinkedStack(pStack);
+    free(pStack);
+}
 
 static int isValidArg(LinkedStack *pStack, int position) {
     if (!pStack || position < 0 || pStack->currentElementCount < position)
