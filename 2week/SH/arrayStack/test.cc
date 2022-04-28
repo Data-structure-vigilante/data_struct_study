@@ -1,5 +1,4 @@
-// #include "../../../gtest/include/gtest/gtest.h"
-#include <gtest/gtest.h>
+#include "../../../gtest/include/gtest/gtest.h"
 #include "arraystack.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -119,7 +118,7 @@ TEST(ArrayStackEmpty, when_StackIsNotEmpty_expect_0) {
     deleteArrayStack(stack);
 }
 
-TEST(isArrayStackEmpty, when_StackIsEmpty_expect_1) {
+TEST(ArrayStackEmpty, when_StackIsEmpty_expect_1) {
     stack = createArrayStack(1);
     EXPECT_EQ(isArrayStackEmpty(stack), 1);
     deleteArrayStack(stack);
