@@ -27,8 +27,23 @@ int pushLS(ArrayStack *pStack, StackNode element) {
         return FALSE;
 }
 
-StackNode *popLS(ArrayStack *pStack);
-StackNode *peekLS(ArrayStack *pStack);
+StackNode *popLS(ArrayStack *pStack) {
+	if (pStack == NULL)
+		return NULL;
+	if (pStack->currentElementCount == 0)
+		return NULL;
+	--pStack->currentElementCount;
+	return &pStack->pElement[pStack->currentElementCount];
+}
+
+StackNode *peekLS(ArrayStack *pStack) {
+	if (pStack == NULL)
+		return NULL;
+	if (pStack->currentElementCount == 0)
+		return NULL;
+	return &pStack->pElement[pStack->currentElementCount-1];
+}
+
 void deleteArrayStack(ArrayStack *pStack) {
     if (!pStack)
         return;
@@ -39,5 +54,15 @@ void deleteArrayStack(ArrayStack *pStack) {
     free(pStack);
     return;
 }
-int isArrayStackFull(ArrayStack *pStack);
-int isArrayStackEmpty(ArrayStack *pStack);
+
+int isArrayStackFull(ArrayStack *pStack) {
+	if (pStack == NULL)
+		return ERROR;
+	return pStack->currentElementCount == pStack->maxElementCount;
+}
+
+int isArrayStackEmpty(ArrayStack *pStack) {
+	if (pStack == NULL)
+		return ERROR;
+	return pStack->currentElementCount == 0;
+}
