@@ -1,5 +1,5 @@
 NAME := main
-SRC := linkedstack.c
+SRC := linkedstack.c exprlinkedstack.c
 TEST_SRC := test.cc
 GTEST_DIR=../../../gtest/
 all: ${NAME}

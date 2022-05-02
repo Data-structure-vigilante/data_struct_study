@@ -1,3 +1,4 @@
+#include "exprlinkedstack.h"
 #include "linkedStack.h"
 #include <gtest/gtest.h>
 #include <stdio.h>
@@ -129,30 +130,45 @@ TEST(LinkedStackEmpty, when_StackIsEmpty_expect_1) {
 }
 
 TEST(reverseString, when_one_char) {
-	char* temp = reverseString("A");
-	EXPECT_EQ(*temp , 'A');
-	free(temp);
+    char *temp = reverseString("A");
+    EXPECT_EQ(*temp, 'A');
+    free(temp);
 }
 
 TEST(reverseString, when_many_char) {
-	char* temp = reverseString("ABCDEF");
-	EXPECT_EQ(strcmp("FEDCBA", temp), 0);
-	free(temp);
+    char *temp = reverseString("ABCDEF");
+    EXPECT_EQ(strcmp("FEDCBA", temp), 0);
+    free(temp);
 }
 
 TEST(validatePoly, when_invalid_poly) {
-	EXPECT_NE(validatePoly("A"), FALSE);
-	EXPECT_NE(validatePoly("(("), TRUE);
-	EXPECT_NE(validatePoly("((("), TRUE);
-	EXPECT_NE(validatePoly("(((((("), TRUE);
-	EXPECT_NE(validatePoly("(]"), TRUE);
-	EXPECT_NE(validatePoly("((A+B)*C"), TRUE);
-	EXPECT_NE(validatePoly("{( A + B }) * C * D"), TRUE);
+    EXPECT_NE(validatePoly("A"), FALSE);
+    EXPECT_NE(validatePoly("(("), TRUE);
+    EXPECT_NE(validatePoly("((("), TRUE);
+    EXPECT_NE(validatePoly("(((((("), TRUE);
+    EXPECT_NE(validatePoly("(]"), TRUE);
+    EXPECT_NE(validatePoly("((A+B)*C"), TRUE);
+    EXPECT_NE(validatePoly("{( A + B }) * C * D"), TRUE);
 }
 
 TEST(validatePoly, when_valid_poly) {
-EXPECT_NE(validatePoly("(((((("), TRUE);
-EXPECT_NE(validatePoly("(]"), TRUE);
+    EXPECT_NE(validatePoly("(((((("), TRUE);
+    EXPECT_NE(validatePoly("(]"), TRUE);
+}
+
+TEST(postFix, when_plusMinus_expect_true) {
+    std::string temp = postFix("A+B-C");
+    EXPECT_EQ(temp, "ABC-+");
+}
+TEST(postFix, when_timesDevide_expect_true) {
+    EXPECT_EQ(strcmp(postFix("A*B"), "AB*"), 0);
+    EXPECT_EQ(strcmp(postFix("A/B"), "AB/"), 0);
+    std::string temp = postFix("A*B/C");
+    EXPECT_EQ(temp, "AB*C/");
+}
+TEST(postFix, when_multiOperator_expect_true) {
+    std::string temp = postFix("2-(3+4)*5");
+    EXPECT_EQ(temp, "234+5*-");
 }
 
 TEST(leaksTest, logs) { system("leaks test > logs"); }
