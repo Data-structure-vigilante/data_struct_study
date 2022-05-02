@@ -2,6 +2,7 @@
 #include <gtest/gtest.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 // testCaseName When_StateUnderTest_Expect_ExpectedBehavior
 
@@ -125,6 +126,33 @@ TEST(LinkedStackEmpty, when_StackIsEmpty_expect_1) {
     stack = createLinkedStack();
     EXPECT_EQ(isLinkedStackEmpty(stack), 1);
     deleteLinkedStack(stack);
+}
+
+TEST(reverseString, when_one_char) {
+	char* temp = reverseString("A");
+	EXPECT_EQ(*temp , 'A');
+	free(temp);
+}
+
+TEST(reverseString, when_many_char) {
+	char* temp = reverseString("ABCDEF");
+	EXPECT_EQ(strcmp("FEDCBA", temp), 0);
+	free(temp);
+}
+
+TEST(validatePoly, when_invalid_poly) {
+	EXPECT_NE(validatePoly("A"), FALSE);
+	EXPECT_NE(validatePoly("(("), TRUE);
+	EXPECT_NE(validatePoly("((("), TRUE);
+	EXPECT_NE(validatePoly("(((((("), TRUE);
+	EXPECT_NE(validatePoly("(]"), TRUE);
+	EXPECT_NE(validatePoly("((A+B)*C"), TRUE);
+	EXPECT_NE(validatePoly("{( A + B }) * C * D"), TRUE);
+}
+
+TEST(validatePoly, when_valid_poly) {
+EXPECT_NE(validatePoly("(((((("), TRUE);
+EXPECT_NE(validatePoly("(]"), TRUE);
 }
 
 TEST(leaksTest, logs) { system("leaks test > logs"); }

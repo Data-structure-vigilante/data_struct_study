@@ -22,6 +22,8 @@ StackNode* popLS(LinkedStack* pStack);
 StackNode* peekLS(LinkedStack* pStack);
 void deleteLinkedStack(LinkedStack* pStack);
 int isLinkedStackEmpty(LinkedStack* pStack);
+char* reverseString(char*);
+int validatePoly(const char* str);
 
 #endif
 

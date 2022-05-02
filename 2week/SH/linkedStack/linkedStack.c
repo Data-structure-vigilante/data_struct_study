@@ -29,11 +29,7 @@ StackNode *popLS(LinkedStack *pStack) {
     StackNode *prev;
 
     current = pStack->pTopElement;
-    while (current->pLink != NULL) {
-        prev = current;
-        current = current->pLink;
-    }
-    prev->pLink = NULL;
+	pStack->pTopElement = current->pLink;
     --pStack->currentElementCount;
     return current;
 }
@@ -41,7 +37,7 @@ StackNode *popLS(LinkedStack *pStack) {
 StackNode *peekLS(LinkedStack *pStack) {
     if (pStack == NULL || pStack->currentElementCount == 0)
         return NULL;
-    return getLLElement(pStack, pStack->currentElementCount);
+    return getLLElement(pStack, 0);
 }
 
 void deleteLinkedStack(LinkedStack *pStack) { deleteLinkedList(pStack); }
@@ -58,21 +54,10 @@ int addLLElement(LinkedStack *pStack, int position, StackNode element) {
     StackNode *new_node;
     StackNode *current;
 
-    if (!isValidArg(pStack, position)) {
-        return -1;
-    }
-
     new_node = (StackNode *)calloc(1, sizeof(StackNode));
     *new_node = element;
-    new_node->pLink = NULL;
-    if (pStack->currentElementCount == 0) {
-        pStack->pTopElement = new_node;
-    } else {
-        current = pStack->pTopElement;
-        while (current->pLink != NULL)
-            current = current->pLink;
-        current->pLink = new_node;
-    }
+    new_node->pLink = pStack->pTopElement;
+	pStack->pTopElement = new_node;
     ++pStack->currentElementCount;
     return position;
 };
@@ -121,4 +106,63 @@ static int isValidArg(LinkedStack *pStack, int position) {
     if (!pStack || position < 0 || pStack->currentElementCount < position)
         return FALSE;
     return TRUE;
+}
+
+#include <string.h>
+char *reverseString(char *src) {
+	LinkedStack* stack;
+	StackNode 	*pNode, temp;
+	char* result;
+	int len = strlen(src);
+
+	stack = createLinkedStack();
+	result = (char*)calloc(len + 1, sizeof(char));
+	while (*src) {
+		temp.data = *src;
+		pushLS(stack, temp);
+		src++;
+	}
+
+	for (int i=0;i<len;i++) {
+		pNode = popLS(stack);
+		result[i] = pNode->data;
+		free(pNode);
+	}
+	result[len] = 0;
+	deleteLinkedStack(stack);
+	return result;
+}
+
+int validatePoly(const char* str) {
+	LinkedStack *stack;
+	StackNode 	temp, *pNode;
+
+	stack  = createLinkedStack();
+	while (*str) {
+		temp.data = *str;
+		if (*str == '(' || *str == '{' || *str == '[')
+			pushLS(stack, temp);
+		else if (*str == ')' || *str == '}' || *str == ']') {
+			pNode = peekLS(stack);
+			if ((pNode->data == '(' && *str == ')') ||
+			    (pNode->data == '{' && *str == '}') ||
+				(pNode->data == '[' && *str == ']')) {
+				pNode = popLS(stack);
+				free(pNode);
+				str++;
+				continue;
+			}
+			deleteLinkedStack(stack);
+			return (FALSE);
+		}
+		str++;
+	}
+	if (isLinkedStackEmpty(stack)) {
+		deleteLinkedStack(stack);
+		return TRUE;
+	}
+	else {
+		deleteLinkedStack(stack);
+		return FALSE;
+	}
 }
