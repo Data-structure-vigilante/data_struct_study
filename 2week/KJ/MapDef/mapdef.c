@@ -13,16 +13,19 @@ static int isSamePos(MapPosition *posA, MapPosition *posB);
 static void cleanUpMaze(int maze[HEIGHT][WIDTH]);
 
 void findPath(int mazeArray[HEIGHT][WIDTH], MapPosition startPos,
-              MapPosition endPos, LinkedStack *pStack) {
+              MapPosition endPos, LinkedStack *pStack)
+{
     initPathStack(startPos, pStack, mazeArray);
     MapPosition lookPos;
 
-    while (1) {
+    while (1)
+    {
         lookPos = getLookPosition(&peekLS(pStack)->data);
 
         if (isBlocked(mazeArray, &lookPos))
             rotateDirectionClockwise(peekLS(pStack));
-        else {
+        else
+        {
             pushLSMapPosition(pStack, lookPos);
             mazeArray[lookPos.y][lookPos.x] = VISIT;
         }
@@ -35,12 +38,14 @@ void findPath(int mazeArray[HEIGHT][WIDTH], MapPosition startPos,
 }
 
 static void initPathStack(MapPosition startPos, LinkedStack *pStack,
-                          int mazeArray[HEIGHT][WIDTH]) {
+                          int mazeArray[HEIGHT][WIDTH])
+{
     pushLSMapPosition(pStack, startPos);
     mazeArray[startPos.y][startPos.x] = VISIT;
 }
 
-MapPosition getLookPosition(MapPosition *position) {
+MapPosition getLookPosition(MapPosition *position)
+{
     int *offset = DIRECTION_OFFSETS[position->direction];
 
     MapPosition ret;
@@ -51,7 +56,8 @@ MapPosition getLookPosition(MapPosition *position) {
     return ret;
 }
 
-static int isBlocked(int mazeArray[HEIGHT][WIDTH], MapPosition *position) {
+static int isBlocked(int mazeArray[HEIGHT][WIDTH], MapPosition *position)
+{
     enum PosStatus status;
 
     if (position->x < 0 || position->x >= WIDTH || //
@@ -64,22 +70,27 @@ static int isBlocked(int mazeArray[HEIGHT][WIDTH], MapPosition *position) {
 }
 
 static void rotateDirectionClockwise(StackNode *top) { ++top->data.direction; };
-static int isBlockedAllDirection(MapPosition *pos) {
+static int isBlockedAllDirection(MapPosition *pos)
+{
     if (pos->direction == STUCK)
         return TRUE;
     return FALSE;
 }
 
-static int isSamePos(MapPosition *posA, MapPosition *posB) {
+static int isSamePos(MapPosition *posA, MapPosition *posB)
+{
     return (posA->x == posB->x && posA->y == posB->y);
 }
 
-static void cleanUpMaze(int maze[HEIGHT][WIDTH]) {
+static void cleanUpMaze(int maze[HEIGHT][WIDTH])
+{
     int height = 0;
 
-    while (height < HEIGHT) {
+    while (height < HEIGHT)
+    {
         int width = 0;
-        while (width < WIDTH) {
+        while (width < WIDTH)
+        {
             if (maze[height][width] == 2)
                 maze[height][width] = 0;
             ++width;
@@ -88,23 +99,33 @@ static void cleanUpMaze(int maze[HEIGHT][WIDTH]) {
     }
 }
 
-void showPath(LinkedStack *pStack, int mazeArray[HEIGHT][WIDTH]) {
+void showPath(LinkedStack *pStack, int mazeArray[HEIGHT][WIDTH])
+{
     StackNode *top_node;
-    printf("%d\n", isLinkedStackEmpty(pStack));
-    while ((top_node = popLS(pStack)) != NULL) {
+
+    while ((top_node = popLS(pStack)) != NULL)
+    {
         mazeArray[top_node->data.y][top_node->data.x] = 5;
         free(top_node);
     }
     printMaze(mazeArray);
 }
 
-void printMaze(int mazeArray[HEIGHT][WIDTH]) {
+void printMaze(int mazeArray[HEIGHT][WIDTH])
+{
     int height = 0;
 
-    while (height < HEIGHT) {
+    while (height < HEIGHT)
+    {
         int width = 0;
-        while (width < WIDTH) {
-            printf("%d ", mazeArray[height][width]);
+        while (width < WIDTH)
+        {
+            if (mazeArray[height][width] == 0)
+                printf("X ");
+            if (mazeArray[height][width] == 1)
+                printf("* ");
+            if (mazeArray[height][width] == 5)
+                printf("P ");
             ++width;
         }
         printf("\n");
