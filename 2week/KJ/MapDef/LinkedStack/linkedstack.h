@@ -4,12 +4,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct StackNodeType {
-    int data;
+typedef struct MapPositionType
+{
+    int x;
+    int y;
+    int direction;
+} MapPosition;
+
+typedef struct StackNodeType
+{
+    MapPosition data;
     struct StackNodeType *pLink;
 } StackNode;
 
-typedef struct LinkedStackType {
+typedef struct LinkedStackType
+{
     int currentElementCount; // 현재 원소의 개수
     StackNode *pTopElement;  // Top 노드의 포인터
 } LinkedStack;
