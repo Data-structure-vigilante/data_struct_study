@@ -1,0 +1,6 @@
+{
+	"files.associations": {
+		"mapdef.h": "c",
+		"ios": "c"
+	}
+}

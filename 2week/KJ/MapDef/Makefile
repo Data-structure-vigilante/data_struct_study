@@ -10,8 +10,8 @@ test: ${SRC} ${TEST_SRC}
 	./test
 	rm test
 
-${NAME}: main.c ${SRC}
-	gcc -fdiagnostics-color=always -g -I${INCLUDE} *.c -o main
+${NAME}: ${NAME}.c ${SRC}
+	gcc -fdiagnostics-color=always -g -I${INCLUDE} ${SRC} ${NAME}.c -o main
 
 clean:
 	rm test

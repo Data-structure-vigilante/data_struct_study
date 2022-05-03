@@ -3,13 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
-typedef struct MapPositionType
-{
-    int x;
-    int y;
-    int direction;
-} MapPosition;
+#include "../mapdef.h"
 
 typedef struct StackNodeType
 {
@@ -24,7 +18,7 @@ typedef struct LinkedStackType
 } LinkedStack;
 
 LinkedStack *createLinkedStack();
-int pushLS(LinkedStack *pStack, StackNode element);
+int pushLSMapPosition(LinkedStack *pStack, MapPosition data);
 StackNode *popLS(LinkedStack *pStack);
 StackNode *peekLS(LinkedStack *pStack);
 void deleteLinkedStack(LinkedStack *pStack);
