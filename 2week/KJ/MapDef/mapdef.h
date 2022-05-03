@@ -10,13 +10,27 @@
 static int DIRECTION_OFFSETS[NUM_DIRECTIONS][2] = {
     {0, -1}, {1, 0}, {0, 1}, {-1, 0}};
 
-enum PosStatus { NOT_VISIT = 0, WALL = 1, VISIT = 2 };
+enum Direction
+{
+    UP = 0,
+    RIGHT = 1,
+    DOWN = 2,
+    LEFT = 3
+};
 
-typedef struct MapPositionType {
+enum PosStatus
+{
+    NOT_VISIT = 0,
+    WALL = 1,
+    VISIT = 2
+};
+
+typedef struct MapPositionType
+{
     int x;
     int y;
-    int direction;
+    enum Direction direction;
 } MapPosition;
 
-
+void printMaze(int mazeArray[HEIGHT][WIDTH]);
 #endif

@@ -1,7 +1,7 @@
 NAME := main
-SRC := ../LinkedStack/linkedstack.c mapdef.c
+SRC := ./LinkedStack/linkedstack.c mapdef.c
 TEST_SRC := test.cc
-INCLUDE := ../LinkedStack
+INCLUDE := ./LinkedStack
 
 all: ${NAME}
 
@@ -11,9 +11,12 @@ test: ${SRC} ${TEST_SRC}
 	rm test
 
 ${NAME}: main.c ${SRC}
-	gcc -fdiagnostics-color=always -g *.c -o main
+	gcc -fdiagnostics-color=always -g -I${INCLUDE} *.c -o main
 
 clean:
 	rm test
 
-.PHONY: all test
+run: all
+	./${NAME}
+	rm ${NAME}
+.PHONY: all test run
