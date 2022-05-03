@@ -157,18 +157,44 @@ TEST(validatePoly, when_valid_poly) {
 }
 
 TEST(postFix, when_plusMinus_expect_true) {
-    std::string temp = postFix("A+B-C");
-    EXPECT_EQ(temp, "ABC-+");
+    char *temp = postFix("A+B-C");
+    EXPECT_EQ(strcmp(temp, "AB+C-"), 0);
+    free(temp);
 }
 TEST(postFix, when_timesDevide_expect_true) {
-    EXPECT_EQ(strcmp(postFix("A*B"), "AB*"), 0);
-    EXPECT_EQ(strcmp(postFix("A/B"), "AB/"), 0);
-    std::string temp = postFix("A*B/C");
-    EXPECT_EQ(temp, "AB*C/");
+    char *temp = postFix("A*B/C");
+    EXPECT_EQ(strcmp(temp, "AB*C/"), 0);
+    free(temp);
 }
 TEST(postFix, when_multiOperator_expect_true) {
-    std::string temp = postFix("2-(3+4)*5");
-    EXPECT_EQ(temp, "234+5*-");
+    char *temp = postFix("2-(3+4)*5");
+    EXPECT_EQ(strcmp(temp, "234+5*-"), 0);
+    free(temp);
+}
+
+TEST(calcExpression, when_plusExpression_expect_true) {
+    char *temp = "3+4";
+    EXPECT_EQ(calcExpression(temp), 7);
+}
+
+TEST(calcExpression, when_multiExpression_expect_true) {
+    char *temp = "3+4*7";
+    EXPECT_EQ(calcExpression(temp), 31);
+}
+
+TEST(calcExpression, when_multiExpression2_expect_true) {
+    char *temp = "3+4*7-9";
+    EXPECT_EQ(calcExpression(temp), 22);
+}
+
+TEST(calcExpression, when_multiExpression3_expect_true) {
+    char *temp = "3+4*7/2-9";
+    EXPECT_EQ(calcExpression(temp), 8);
+}
+
+TEST(calcExpression, when_multiExpression4_expect_true) {
+    char *temp = "(3+4)*9/3-9";
+    EXPECT_EQ(calcExpression(temp), 12);
 }
 
 TEST(leaksTest, logs) { system("leaks test > logs"); }

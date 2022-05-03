@@ -18,4 +18,5 @@ typedef struct ExprTokenType {
     Precedence type;
 } ExprToken;
 char *postFix(char *str);
+float calcExpression(char *str);
 #endif
