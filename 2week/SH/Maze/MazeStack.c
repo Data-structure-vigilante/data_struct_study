@@ -11,6 +11,7 @@ int same(MapPosition *startPos, MapPosition endPos) {
 MapPosition addPosition(MapPosition startPos) {
     startPos.x = startPos.x + DIRECTION_OFFSETS[startPos.direction][0];
     startPos.y = startPos.y + DIRECTION_OFFSETS[startPos.direction][1];
+    startPos.direction = 0;
     return startPos;
 }
 
@@ -36,11 +37,9 @@ void findPath(int mazeArray[HEIGHT][WIDTH], MapPosition startPos,
             ++peekLS(pStack)->data.direction;
         }
         if (peekLS(pStack)->data.direction == 4) {
-            mazeArray[peekLS(pStack)->data.x][peekLS(pStack)->data.y] =
-                NOT_VISIT;
-            // int tempDirection = peekLS(pStack)->data.direction;
+            mazeArray[peekLS(pStack)->data.x][peekLS(pStack)->data.y] = 3;
             free(popLS(pStack));
-            ++peekLS(pStack)->data.direction == 4;
+            peekLS(pStack)->data.direction = 0;
         }
     }
 }
@@ -48,7 +47,7 @@ void findPath(int mazeArray[HEIGHT][WIDTH], MapPosition startPos,
 void showPath(LinkedStack *pStack, int mazeArray[HEIGHT][WIDTH]) {
     for (int i = 0; i < HEIGHT; ++i) {
         for (int j = 0; j < WIDTH; ++j) {
-            printf("%d", mazeArray[i][j]);
+            printf("%d", mazeArray[i][j] == 3 ? 0 : mazeArray[i][j]);
         }
         printf("\n");
     }
@@ -57,7 +56,7 @@ void showPath(LinkedStack *pStack, int mazeArray[HEIGHT][WIDTH]) {
 void printMaze(int mazeArray[HEIGHT][WIDTH]) {
     for (int i = 0; i < HEIGHT; ++i) {
         for (int j = 0; j < WIDTH; ++j) {
-            printf("%d", mazeArray[i][j] == 2 ? 0 : mazeArray[i][j]);
+            printf("%d", mazeArray[i][j] == 1 ? 1 : 0);
         }
         printf("\n");
     }
