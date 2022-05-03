@@ -1,21 +1,28 @@
 #include "Map.h"
 #include "MazeStack.h"
 
+int maze[HEIGHT][WIDTH] = {{0, 0, 0, 0, 0, 0, 1, 1}, {1, 0, 1, 1, 1, 1, 1, 1},
+                           {1, 0, 1, 1, 1, 1, 1, 1}, {1, 0, 1, 1, 1, 1, 1, 1},
+                           {1, 0, 1, 1, 1, 1, 1, 1}, {1, 0, 1, 1, 1, 1, 1, 1},
+                           {1, 0, 1, 1, 1, 1, 1, 1}, {1, 0, 0, 0, 0, 0, 0, 0}};
+
 int main(void) {
-	int maze[HEIGHT][WIDTH];
-	LinkedStack *stack;
-	MapPosition start;
-	MapPosition end;
 
-	start.x = 0;
-	start.y = 0;
-	start.direction = 0;
+    LinkedStack *stack;
+    MapPosition start;
+    MapPosition end;
 
-	end.x = 7;
-	end.y = 7;
-	end.direction = 0;
+    start.x = 0;
+    start.y = 0;
+    start.direction = 0;
 
-	stack = createLinkedStack();
-	findPath(maze, start, end, stack);
-	return;
+    end.x = 7;
+    end.y = 7;
+    end.direction = 0;
+
+    stack = createLinkedStack();
+    printMaze(maze);
+    findPath(maze, start, end, stack);
+    showPath(stack, maze);
+    return 0;
 }
