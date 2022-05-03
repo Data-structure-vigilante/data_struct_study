@@ -2,104 +2,70 @@
 #include "./LinkedStack/linkedstack.h"
 #include <stdio.h>
 
-static void initPathStack(MapPosition startPos, LinkedStack *pStack);
-static MapPosition lookPosition(MapPosition *position);
+static void initPathStack(MapPosition startPos, LinkedStack *pStack,
+                          int mazeArray[HEIGHT][WIDTH]);
+static MapPosition getLookPosition(MapPosition *position);
 static enum Direction switchDirection(enum Direction direction);
-static int isOutofMap(MapPosition *position);
-static int isBlocked(enum PosStatus posStatus);
-static int isStuck(int mazeArray[HEIGHT][WIDTH], MapPosition pos);
+static int isBlocked(int mazeArray[HEIGHT][WIDTH], MapPosition *position);
+static int isBlockedAllDirection(MapPosition *pos);
 static void rotateDirectionClockwise(StackNode *top);
 static int isSamePos(MapPosition *posA, MapPosition *posB);
+static void cleanUpMaze(int maze[HEIGHT][WIDTH]);
 
 void findPath(int mazeArray[HEIGHT][WIDTH], MapPosition startPos,
               MapPosition endPos, LinkedStack *pStack) {
-    initPathStack(startPos, pStack);
-    MapPosition currentPos;
+    initPathStack(startPos, pStack, mazeArray);
+    MapPosition lookPos;
 
     while (1) {
-        currentPos = lookPosition(&peekLS(pStack)->data);
-        // 현재 보고있는 좌표가 벽이다. || 현재 보고있는 좌표가 방문한 곳이다.
-        // -> 다른 방향을 본다.
-        if (isOutofMap(&currentPos) ||
-            isBlocked(mazeArray[currentPos.y][currentPos.x]))
+        lookPos = getLookPosition(&peekLS(pStack)->data);
+
+        if (isBlocked(mazeArray, &lookPos))
             rotateDirectionClockwise(peekLS(pStack));
-
-        // 현재 보고있는 좌표가 방문하지 않은 곳이다.
-        // -> 간다
-        else if (!isBlocked(mazeArray[currentPos.y][currentPos.x])) {
-            pushLSMapPosition(pStack, currentPos);
-            mazeArray[currentPos.y][currentPos.x] = VISIT;
+        else {
+            pushLSMapPosition(pStack, lookPos);
+            mazeArray[lookPos.y][lookPos.x] = VISIT;
         }
-        // pop
-        if (isStuck(mazeArray, peekLS(pStack)->data)) {
-        }
-
-        // 사 방에 대해서 확인을 다 했는데도 위 조건에 맞게 처리되지 않았을
-        // 경우에만 여기로 네 방향 모두 벽이거나 방문했다면 빠구할 때는 pop
-
-        //탈출 조건
-        // 1. 현재 타겟 포지션이 Goal이다.
-        // 2. 스택이 엠티다.
-        if (isSamePos(&currentPos, &endPos) || isLinkedStackEmpty(pStack))
+        if (isBlockedAllDirection(&peekLS(pStack)->data))
+            free(popLS(pStack));
+        if (isSamePos(&lookPos, &endPos) || isLinkedStackEmpty(pStack))
             break;
     }
+    cleanUpMaze(mazeArray);
 }
 
-static void initPathStack(MapPosition startPos, LinkedStack *pStack) {
+static void initPathStack(MapPosition startPos, LinkedStack *pStack,
+                          int mazeArray[HEIGHT][WIDTH]) {
     pushLSMapPosition(pStack, startPos);
+    mazeArray[startPos.y][startPos.x] = VISIT;
 }
 
-MapPosition lookPosition(MapPosition *position) {
+MapPosition getLookPosition(MapPosition *position) {
     int *offset = DIRECTION_OFFSETS[position->direction];
 
     MapPosition ret;
 
     ret.x = position->x + offset[0];
     ret.y = position->y + offset[1];
-    ret.direction = switchDirection(position->direction);
+    ret.direction = UP;
     return ret;
 }
 
-static enum Direction switchDirection(enum Direction direction) {
-    if (direction == UP || direction == RIGHT)
-        direction += 2;
-    else
-        direction -= 2;
-    return (direction);
-}
+static int isBlocked(int mazeArray[HEIGHT][WIDTH], MapPosition *position) {
+    enum PosStatus status;
 
-static int isOutofMap(MapPosition *position) {
     if (position->x < 0 || position->x >= WIDTH || //
         position->y < 0 || position->y >= HEIGHT)
+        return TRUE;
+    status = mazeArray[position->y][position->x];
+    if (status == WALL || status == VISIT)
         return TRUE;
     return FALSE;
 }
 
-static int isBlocked(enum PosStatus posStatus) {
-    if (posStatus == WALL || posStatus == VISIT)
-        return TRUE;
-    else
-        return FALSE;
-}
-
-static void rotateDirectionClockwise(StackNode *top) {
-    ++top->data.direction;
-    if (top->data.direction > 3)
-        top->data.direction -= 3;
-};
-
-static int isStuck(int mazeArray[HEIGHT][WIDTH], MapPosition pos) {
-    pos.x += 1;
-    if (isOutofMap(&pos) || isBlocked(mazeArray[pos.y][pos.x]))
-        return TRUE;
-    pos.x -= 2;
-    if (isOutofMap(&pos) || isBlocked(mazeArray[pos.y][pos.x]))
-        return TRUE;
-    pos.y += 1;
-    if (isOutofMap(&pos) || isBlocked(mazeArray[pos.y][pos.x]))
-        return TRUE;
-    pos.y -= 2;
-    if (isOutofMap(&pos) || isBlocked(mazeArray[pos.y][pos.x]))
+static void rotateDirectionClockwise(StackNode *top) { ++top->data.direction; };
+static int isBlockedAllDirection(MapPosition *pos) {
+    if (pos->direction == STUCK)
         return TRUE;
     return FALSE;
 }
@@ -108,11 +74,26 @@ static int isSamePos(MapPosition *posA, MapPosition *posB) {
     return (posA->x == posB->x && posA->y == posB->y);
 }
 
+static void cleanUpMaze(int maze[HEIGHT][WIDTH]) {
+    int height = 0;
+
+    while (height < HEIGHT) {
+        int width = 0;
+        while (width < WIDTH) {
+            if (maze[height][width] == 2)
+                maze[height][width] = 0;
+            ++width;
+        }
+        ++height;
+    }
+}
+
 void showPath(LinkedStack *pStack, int mazeArray[HEIGHT][WIDTH]) {
     StackNode *top_node;
-
+    printf("%d\n", isLinkedStackEmpty(pStack));
     while ((top_node = popLS(pStack)) != NULL) {
-        mazeArray[top_node->data.y][top_node->data.x] = '*';
+        mazeArray[top_node->data.y][top_node->data.x] = 5;
+        free(top_node);
     }
     printMaze(mazeArray);
 }
