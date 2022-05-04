@@ -1,0 +1,23 @@
+Process:         test [7213]
+Path:            /Users/USER/Library/Mobile Documents/com~apple~CloudDocs/*/test
+Load Address:    0x106441000
+Identifier:      test
+Version:         ???
+Code Type:       X86-64
+Platform:        macOS
+Parent Process:  make [7196]
+
+Date/Time:       2022-05-03 10:12:17.741 +0900
+Launch Time:     2022-05-03 10:12:17.292 +0900
+OS Version:      macOS 12.3.1 (21E258)
+Report Version:  7
+Analysis Tool:   /usr/bin/leaks
+
+Physical footprint:         408K
+Physical footprint (peak):  408K
+----
+
+leaks Report Version: 4.0
+Process 7213: 282 nodes malloced for 25 KB
+Process 7213: 0 leaks for 0 total leaked bytes.
+
