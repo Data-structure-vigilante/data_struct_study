@@ -1,17 +1,15 @@
 #ifndef _LINKED_DEQUE_
 #define _LINKED_DEQUE_
-typedef struct DequeNodeType
-{
-	char data;
-	struct DequeNodeType *pRLink;
-	struct DequeNodeType *pLLink;
+typedef struct DequeNodeType {
+    char data;
+    struct DequeNodeType *pRLink;
+    struct DequeNodeType *pLLink;
 } DequeNode;
 
-typedef struct LinkedDequeType
-{
-	int currentElementCount; // 현재 원소의 개수
-	DequeNode *pFrontNode;	 // Front 노드의 포인터
-	DequeNode *pRearNode;	 // Rear 노드의 포인터
+typedef struct LinkedDequeType {
+    int currentElementCount; // 현재 원소의 개수
+    DequeNode *pFrontNode;   // Front 노드의 포인터
+    DequeNode *pRearNode;    // Rear 노드의 포인터
 } LinkedDeque;
 
 LinkedDeque *createLinkedDeque();
