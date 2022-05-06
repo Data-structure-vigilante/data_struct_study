@@ -18,10 +18,11 @@ int enqueueAQ(ArrayQueue *pQueue, ArrayQueueNode element) {
         pQueue->maxElementCount == pQueue->currentElementCount)
         return (FALSE);
     if (pQueue->currentElementCount == 0) {
-        pQueue->pElement[pQueue->rear] = element;
+        pQueue->pElement[pQueue->rear % pQueue->maxElementCount] = element;
     } else {
-        pQueue->pElement[++pQueue->rear] = element;
+        pQueue->pElement[++pQueue->rear % pQueue->maxElementCount] = element;
     }
+    pQueue->rear = pQueue->rear % pQueue->maxElementCount;
     ++pQueue->currentElementCount;
     return TRUE;
 }
@@ -30,8 +31,10 @@ ArrayQueueNode *dequeueAQ(ArrayQueue *pQueue) {
     if (pQueue == NULL || pQueue->currentElementCount == 0)
         return (NULL);
     --pQueue->currentElementCount;
-    return &pQueue->pElement[pQueue->front == pQueue->rear ? pQueue->front
-                                                           : pQueue->front++];
+    if (pQueue->front != pQueue->rear)
+        ++pQueue->front;
+    pQueue->front = pQueue->front % pQueue->maxElementCount;
+    return &pQueue->pElement[pQueue->front];
 };
 ArrayQueueNode *peekAQ(ArrayQueue *pQueue) {
     if (pQueue == NULL || pQueue->currentElementCount == 0)
