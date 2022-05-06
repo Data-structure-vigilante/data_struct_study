@@ -60,7 +60,7 @@ TEST(dequeueAQ, when_deQueToEmptyQueue_expect_NULL) {
 TEST(dequeueAQ, when_1ElementQueue_expect_element) {
     ArrayQueue *queue;
     ArrayQueueNode temp;
-		ArrayQueueNode *result;
+	ArrayQueueNode *result;
 
     temp.data = 1;
     queue = createArrayQueue(1);
@@ -71,6 +71,51 @@ TEST(dequeueAQ, when_1ElementQueue_expect_element) {
 		EXPECT_EQ(queue->currentElementCount, 0);
 		EXPECT_EQ(queue->front, 0);
 		EXPECT_EQ(queue->rear, 0);
+    deleteArrayQueue(queue);
+}
+
+TEST(peekAQ, when_queueIsEmpty_expect_NULL) {
+    ArrayQueue *queue;
+
+    queue = createArrayQueue(1);
+	EXPECT_EQ(peekAQ(queue), nullptr);
+    deleteArrayQueue(queue);
+}
+
+TEST(peekAQ, when_queueIsNotEmpty_expect_NULL) {
+    ArrayQueue *queue;
+    ArrayQueueNode temp;
+
+    temp.data = 1;
+    queue = createArrayQueue(1);
+    enqueueAQ(queue, temp);
+	EXPECT_NE(peekAQ(queue), nullptr);
+    EXPECT_EQ(peekAQ(queue)->data, 1);
+    deleteArrayQueue(queue);
+}
+
+TEST(CircularCase, when_expect_TRUE) {
+	ArrayQueue *queue;
+    ArrayQueueNode temp;
+
+    queue = createArrayQueue(3);
+	for (int i=0;i<queue->maxElementCount;i++) {
+		temp.data = i+1;
+		enqueueAQ(queue, temp);
+		EXPECT_EQ(queue->currentElementCount, temp.data);
+	}
+	for (int i=0;i<queue->maxElementCount-1;i++) {
+		EXPECT_EQ(dequeueAQ(queue)->data, i+1);
+		EXPECT_EQ(queue->front, i+1);
+		EXPECT_EQ(queue->currentElementCount, queue->maxElementCount -1 -i);
+	}
+    temp.data = 10;
+    enqueueAQ(queue, temp);
+    EXPECT_EQ(queue->rear, 0);
+    enqueueAQ(queue, temp);
+    EXPECT_EQ(queue->rear, 1);
+    enqueueAQ(queue, temp);
+    EXPECT_NE(queue->rear, 2);
     deleteArrayQueue(queue);
 }
 

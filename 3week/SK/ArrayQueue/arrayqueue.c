@@ -32,7 +32,7 @@ int enqueueAQ(ArrayQueue *pQueue, ArrayQueueNode element) {
     }
     //비었을 때 다르게 동작해야하는게 있나>? (빈 큐일 때, 프론트와 리어가
     //가르키고 있는 인덱스에 요소가 없다.)
-    if (pQueue->currentElementCount != 0) {
+    if (isArrayQueueEmpty(pQueue) == FALSE) {
         ++pQueue->rear;
         pQueue->rear = pQueue->rear % pQueue->maxElementCount;
     }
@@ -45,7 +45,7 @@ int enqueueAQ(ArrayQueue *pQueue, ArrayQueueNode element) {
 ArrayQueueNode *dequeueAQ(ArrayQueue *pQueue) {
     int idx = 0;
 
-    if (pQueue == NULL || pQueue->currentElementCount == 0)
+    if (pQueue == NULL || isArrayQueueEmpty(pQueue))
         return NULL;
     --pQueue->currentElementCount;
 
@@ -59,7 +59,11 @@ ArrayQueueNode *dequeueAQ(ArrayQueue *pQueue) {
 		return &pQueue->pElement[idx];
 }
 
-ArrayQueueNode *peekAQ(ArrayQueue *pQueue);
+ArrayQueueNode *peekAQ(ArrayQueue *pQueue) {
+	if (pQueue == NULL || isArrayQueueEmpty(pQueue))
+        return NULL;
+	return &pQueue->pElement[pQueue->front];
+}
 
 void deleteArrayQueue(ArrayQueue *pQueue) {
     if (pQueue == NULL)
@@ -69,5 +73,13 @@ void deleteArrayQueue(ArrayQueue *pQueue) {
     free(pQueue);
 }
 
-int isArrayQueueFull(ArrayQueue *pQueue);
-int isArrayQueueEmpty(ArrayQueue *pQueue);
+int isArrayQueueFull(ArrayQueue *pQueue) {
+	if (pQueue == NULL)
+		return ERROR;
+	return pQueue->currentElementCount == pQueue->maxElementCount;
+}
+int isArrayQueueEmpty(ArrayQueue *pQueue) {
+	if (pQueue == NULL)
+		return ERROR;
+	return pQueue->currentElementCount == 0;
+}
