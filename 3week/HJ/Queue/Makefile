@@ -1,5 +1,5 @@
 NAME := main
-SRC := arrayqueue.c
+SRC := arrayqueue.c linkeddequeue.c
 TEST_SRC := test.cc
 GTEST_DIR=../../gtest/
 

@@ -1,4 +1,5 @@
 #include "arrayqueue.h"
+#include "linkeddequeue.h"
 // #include <gtest/gtest.h>
 #include "../../../gtest/include/gtest/gtest.h"
 
@@ -81,6 +82,26 @@ TEST(peekAQ, when_onlyOneQueue_expect_1) {
     EXPECT_EQ(tmp->front, 0);
     EXPECT_EQ(tmp->rear, 0);
     free(tmp);
+}
+
+TEST(insertFrontLD, when_emptyLD_expect_suceess) {
+    LinkedDeque *deque = createLinkedDeque();
+    DequeNode node;
+    node.data = 1;
+
+    EXPECT_EQ(deque->currentElementCount, 0);
+    insertFrontLD(deque, node);
+    EXPECT_EQ(deque->currentElementCount, 1);
+    EXPECT_EQ(deque->pFrontNode->data, 1);
+    EXPECT_EQ(deque->pRearNode->data, 1);
+    DequeNode node2;
+
+    node2.data = 2;
+    insertFrontLD(deque, node2);
+    EXPECT_EQ(deque->currentElementCount, 2);
+    EXPECT_EQ(deque->pRearNode->data, 2);
+    EXPECT_EQ(deque->pFrontNode->data, 1);
+    free(deque);
 }
 
 int main(int argc, char **argv) {
