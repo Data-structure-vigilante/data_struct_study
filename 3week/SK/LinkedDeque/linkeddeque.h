@@ -11,15 +11,14 @@ typedef struct DequeNodeType
 typedef struct LinkedDequeType
 {
 	int currentElementCount;	// 현재 원소의 개수
-	DequeNode* pFrontNode;		// Front 노드의 포인터
-	DequeNode* pRearNode;		// Rear 노드의 포인터
+	DequeNode headerNode;
 } LinkedDeque;
 
 LinkedDeque* createLinkedDeque();
 int insertFrontLD(LinkedDeque* pDeque, DequeNode element);
 int insertRearLD(LinkedDeque* pDeque, DequeNode element);
-DequeNode* deleteFrontLD(LinkedDeque* pDeque);
-DequeNode* deleteRearLD(LinkedDeque* pDeque);
+DequeNode* popFrontLD(LinkedDeque* pDeque);
+DequeNode* popRearLD(LinkedDeque* pDeque);
 DequeNode* peekFrontLD(LinkedDeque* pDeque);
 DequeNode* peekRearLD(LinkedDeque* pDeque);
 void deleteLinkedDeque(LinkedDeque* pDeque);
