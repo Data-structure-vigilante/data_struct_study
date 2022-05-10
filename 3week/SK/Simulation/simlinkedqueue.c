@@ -44,7 +44,7 @@ DequeNode* processServiceNodeEnd(int currentTime, DequeNode *pServiceNode, int *
 	return pServiceNode;
 }
 
-// 
+//
 void printSimCustomer(int currentTime, SimCustomer customer) {
 	printf("고객 도착 시간 : %d\n고객 서비스 이용 시간 : %d\n고객 서비스 시작 시간 : %d\n고객 서비스 종료 시간 : %d\n",
 	customer.arrivalTime, customer.serviceTime, customer.startTime, customer.endTime);
@@ -60,6 +60,7 @@ void printSimCustomer(int currentTime, SimCustomer customer) {
 		printf("서비스 이용 종료\n");
 		break;
 	}
+	printf("\n");
 }
 
 void printWaitQueueStatus(int currentTime, LinkedDeque *pWaitQueue) {
@@ -67,8 +68,10 @@ void printWaitQueueStatus(int currentTime, LinkedDeque *pWaitQueue) {
 
 	printf("현재시간 : %d\n", currentTime);
 	node = pWaitQueue->headerNode.pRLink;
-	while (node != &pWaitQueue->headerNode)
+	while (node != &pWaitQueue->headerNode) {
 		printSimCustomer(currentTime, node->data);
+		node = node->pRLink;
+	}
 }
 
 void printReport(LinkedDeque *pWaitDeque, int serviceUserCount, int totalWaitTime) {

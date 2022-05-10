@@ -1,9 +1,9 @@
 #ifndef __SIMDEF_H__
 #define __SIMDEF_H__
 
-typedef enum SimStatusType { 
-	ARRIVAL, 
-	START, 
+typedef enum SimStatusType {
+	ARRIVAL,
+	START,
 	END } SimStatus;
 
 typedef struct SimCustomerType

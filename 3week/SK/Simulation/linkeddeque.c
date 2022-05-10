@@ -13,7 +13,7 @@ LinkedDeque *createLinkedDeque() {
     return deque;
 }
 
-inline DequeNode *createNode(DequeNode element) {
+DequeNode *createNode(DequeNode element) {
     DequeNode *newNode;
 
     newNode = (DequeNode *)calloc(1, sizeof(DequeNode));
@@ -41,6 +41,7 @@ int insertFrontLD(LinkedDeque *pDeque, DequeNode element) {
     newNode = createNode(element);
     insertNewNode(&pDeque->headerNode, newNode);
     ++pDeque->currentElementCount;
+    return TRUE;
 }
 
 int insertRearLD(LinkedDeque *pDeque, DequeNode element) {
@@ -53,7 +54,9 @@ int insertRearLD(LinkedDeque *pDeque, DequeNode element) {
     newNode = createNode(element);
     insertNewNode(pDeque->headerNode.pLLink, newNode);
     ++pDeque->currentElementCount;
+    return TRUE;
 }
+
 static DequeNode *popLD(DequeNode *targetNode) {
     targetNode->pRLink->pLLink = targetNode->pLLink;
     targetNode->pLLink->pRLink = targetNode->pRLink;
