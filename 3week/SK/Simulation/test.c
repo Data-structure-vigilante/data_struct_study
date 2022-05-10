@@ -39,7 +39,6 @@ int main(void)
     perror("pthread1 create error");
     exit(EXIT_FAILURE);
   }
-
   pthread_join(pthread[0], (void **)&status);
   pthread_join(pthread[1], (void **)&status);
 
