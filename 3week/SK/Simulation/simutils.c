@@ -1,31 +1,39 @@
+#include "simlinkedqueue.h"
 #include "simutils.h"
 #include <pthread.h>
 #include <stdlib.h>
 
 
-static BankCounter *initBankCounter(int workerCount, int *currentTime, LinkedDeque *endDQ);
+static BankCounter *initBankCounter(int bankCount, int *currentTime, LinkedDeque *endDQ);
+static Manager initManager(LinkedDeque *waitDQ, pthread_t *bankCounters);
+int initBank() {
 
-int initBank() {}
-
-
-
-void *bankCounterLogic(void *counter) {}
+}
 
 
 
+void *bankCounterLogic(void *bankCounter) {
+	BankCounter* bc;
 
-int runBank(int currentTime, int closeTime, int workerCount, LinkedDeque *arrivalDQ) {
-	if (currentTime < 0 || closeTime < currentTime || workerCount < 1)
+	bc = bankCounter;
+	if (bc->worker.customerNode == NULL)
+}
+
+
+
+
+int runBank(int currentTime, int closeTime, int bankCount, LinkedDeque *arrivalDQ) {
+	if (currentTime < 0 || closeTime < currentTime || bankCount < 1)
 		return FALSE;
 	//worker , manager 출근시키기.
 	int thr_id;
-	pthread_t pthread[workerCount];
+	pthread_t workerThread[bankCount];
 	LinkedDeque *waitDQ = createLinkedDeque();
 	LinkedDeque *endDQ = createLinkedDeque();
-	BankCounter *bankCounters = initBankCounters(workerCount, &currentTime, endDQ);
-	Manager manager;
-	for (int i =0; i < workerCount; ++i) {
-		thr_id = pthread_create(&pthread[i], NULL, bankCounterLogic, (void*)&bankCounters[i]); //2
+	BankCounter *bankCounters = initBankCounters(bankCount, &currentTime, endDQ);
+	Manager manager = initManager(waitDQ, workerThread);
+	for (int i =0; i < bankCount; ++i) {
+		thr_id = pthread_create(&workerThread[i], NULL, bankCounterLogic, (void*)&bankCounters[i]); //2
 		if(thr_id < 0)
 		{
 			perror("pthread create error");
@@ -33,24 +41,41 @@ int runBank(int currentTime, int closeTime, int workerCount, LinkedDeque *arriva
 		}
 	}
 
+	// simulation
 	while (currentTime < closeTime) {
-
+		processArrival(currentTime, arrivalDQ, waitDQ);
+		// 대기열에서 분배하는 로직
+		
+		// 작업 완료된 후 처리
+		///	1. woker들이 자신의 일을 처리 후 덱에 삽입.
+		
+		provideService(bankCounters);
+		/// 2. manager가 정보를 취합.
 		++currentTime;
 	}
-
+		//
 }
 
-static BankCounter *initBankCounter(int workerCount, int *currentTime, LinkedDeque *endDQ) {
+static BankCounter *initBankCounter(int bankCount, int *currentTime, LinkedDeque *endDQ) {
 	BankCounter *bankCounters;
 
-	bankCounters = (BankCounter *)calloc(workerCount, sizeof(BankCounter));
+	bankCounters = (BankCounter *)calloc(bankCount, sizeof(BankCounter));
 	if (bankCounters == NULL) {
 			return NULL;
 	}
-	for(int i =0; i < workerCount; ++i) {
+	for(int i =0; i < bankCount; ++i) {
 		bankCounters[i].currentTime = currentTime;
 		bankCounters[i].endDQ = endDQ;
 	}
 	return bankCounters;
 }
 
+static Manager initManager(LinkedDeque *waitDQ, pthread_t *bankCounters) {
+	Manager manager;
+
+	manager.waitDQ = waitDQ;
+	manager.workerThread = bankCounters;
+	manager.finalReport.serviceUserCount = 0;
+	manager.finalReport.totalWaitTime = 0;
+	return manager;
+}

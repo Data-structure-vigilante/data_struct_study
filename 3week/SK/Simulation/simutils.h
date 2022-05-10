@@ -20,7 +20,7 @@ typedef struct ReportType {
 
 typedef struct ManagerType {
     LinkedDeque *waitDQ;
-		pthread_t *workers;
+	pthread_t *workerThread;
     Report finalReport;
 } Manager;
 
