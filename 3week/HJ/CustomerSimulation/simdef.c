@@ -39,23 +39,27 @@ void processArrival(int currentTime, LinkedDeque *pArrivalQueue,
 }
 DequeNode *processServiceNodeStart(int currentTime, LinkedDeque *pWaitQueue) {
     DequeNode *node;
+    DequeNode *temp;
 
     node = peekFrontLD(pWaitQueue);
-    if (node->data.status == arrival) {
-        node->data.status = start;
-        node->data.startTime = currentTime;
-    } else if (currentTime - node->data.startTime == node->data.serviceTime) {
+    if (currentTime - node->data.startTime == node->data.serviceTime) {
         node = deleteFrontLD(pWaitQueue);
         node->data.status = end;
-        return node;
+        node->data.endTime = currentTime;
+    } else
+        node = NULL;
+    temp = peekFrontLD(pWaitQueue);
+    if (temp && temp->data.status == arrival) {
+        temp->data.status = start;
+        temp->data.startTime = currentTime;
     }
-    return NULL;
+    return node;
 }
 DequeNode *processServiceNodeEnd(int currentTime, DequeNode *pServiceNode,
                                  int *pServiceUserCount, int *pTotalWaitTime) {
-    pTotalWaitTime += currentTime - (pServiceNode->data.arrivalTime +
-                                     pServiceNode->data.serviceTime);
-    pServiceUserCount += 1;
+    *pTotalWaitTime +=
+        pServiceNode->data.startTime - pServiceNode->data.arrivalTime;
+    *pServiceUserCount += 1;
     return pServiceNode;
 }
 void printSimCustomer(int currentTime, SimCustomer customer);
@@ -75,18 +79,20 @@ int main(int ac, char **av) {
 
     pArrivalQueue = createLinkedDeque();
     pWaitQueue = createLinkedDeque();
-    while (1) {
+    node = NULL;
+    while (i < ac || !isLinkedDequeEmpty(pWaitQueue)) {
         if (t % 2 == 0 && i < ac)
             insertCustomer(t, *av[i++] - '0', pArrivalQueue);
         processArrival(t, pArrivalQueue, pWaitQueue);
-
-        node = processServiceNodeStart(t, pWaitQueue);
-        if (node)
+        if (node != NULL)
             free(processServiceNodeEnd(t, node, &serviceUserCount,
                                        &totalWaitTime));
+        node = processServiceNodeStart(t, pWaitQueue);
         ++t;
     }
+    if (node != NULL)
+        free(processServiceNodeEnd(t, node, &serviceUserCount, &totalWaitTime));
     printf("wait Time: %d\n", totalWaitTime);
-
+    printf("user Count: %d\n", serviceUserCount);
     return (0);
 }
