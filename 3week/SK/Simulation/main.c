@@ -23,11 +23,7 @@ int main() {
 
 	// 영업시간 동안
 		while (report.currentTime < 7) {
-			// 사람들이 도착한다.
-			processArrival(report.currentTime, arraivalDQ, waitDQ);
-
-			// 워커가 대기 중인 사람을 가져다가 일한다. 워커 쓰레드 함수.
-			++report.currentTime;
+			runBank();
 		}
     printWaitQueueStatus(0, waitDQ);
 }

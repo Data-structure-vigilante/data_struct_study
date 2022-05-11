@@ -2,6 +2,7 @@
 #define __SIMUTILS_H__
 
 #include "linkeddeque.h"
+
 /// 매니저와, 워커가 존재
 /// 매니저는 메인 쓰레드에서 동작, 워커는 워커쓰레드에서 동작
 /// 😀 매니저의 책임
@@ -17,11 +18,17 @@ typedef struct ReportType {
     int serviceUserCount;
     int totalWaitTime;
 } Report;
+typedef struct WorkerReadyCountType {
+    int count;
+    int workerCount;
+    pthread_mutext_t counterMutext;
+} WorkerReadyCount;
 
 typedef struct ManagerType {
     LinkedDeque *waitDQ;
-	pthread_t *workerThread;
+    pthread_t *workerThread;
     Report finalReport;
+    WorkerReadyCount *workerReadyCount
 } Manager;
 
 typedef struct WorkerType {
@@ -30,9 +37,10 @@ typedef struct WorkerType {
 } Worker;
 
 typedef struct BankCounterType {
-	Worker worker;
-	LinkedDeque *endDQ;
-	int *currentTime;
+    Worker worker;
+    LinkedDeque *endDQ;
+    int *currentTime;
+    WorkerReadyCount *workerReadyCount;
 } BankCounter;
 
 #endif
