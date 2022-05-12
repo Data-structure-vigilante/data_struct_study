@@ -43,16 +43,7 @@ TEST(getRootNodeBT, when_NotEmptyTree_expext_rootNode) {
     free(tree);
 }
 
-TEST(deleteBinTree, when_notEmptyTree_expext_empty) {
-    BinTree *tree;
-    BinTreeNode node;
-
-    node.data = 10;
-    tree = makeBinTree(node);
-    deleteBinTree(tree);
-    EXPECT_EQ(getRootNodeBT(tree)->data, nullptr);
-}
-
+TEST(insertLeftChildNodeBT, when_parentHaveLeftChild_expect_)
 TEST(Leaks, leaks) { system("leaks test"); }
 
 int main(int argc, char **argv) {

@@ -24,7 +24,9 @@ BinTreeNode *insertRightChildNodeBT(BinTreeNode *pParentNode,
 BinTreeNode *getLeftChildNodeBT(BinTreeNode *pNode);
 BinTreeNode *getRightChildNodeBT(BinTreeNode *pNode);
 void deleteBinTree(BinTree *pBinTree);
+void deleteNodeRecursive(BinTreeNode *node);
 void deleteBinTreeNode(BinTreeNode *pNode);
+BinTreeNode *createNode(BinTreeNode element);
 
 #endif
 
