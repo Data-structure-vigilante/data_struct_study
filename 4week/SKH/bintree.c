@@ -1,7 +1,5 @@
 #include "bintree.h"
 
-static void deleteNodeRecursive(BinTreeNode *node);
-
 BinTree *makeBinTree(BinTreeNode rootNode) {
     BinTree *tree;
     BinTreeNode *node;
@@ -62,13 +60,13 @@ BinTreeNode *insertRightChildNodeBT(BinTreeNode *pParentNode,
 };
 
 BinTreeNode *getLeftChildNodeBT(BinTreeNode *pNode) {
-    if(pNode == NULL)
+    if (pNode == NULL)
         return NULL;
     return pNode->pLeftChild;
 };
 
 BinTreeNode *getRightChildNodeBT(BinTreeNode *pNode) {
-     if(pNode == NULL)
+    if (pNode == NULL)
         return NULL;
     return pNode->pRightChild;
 }

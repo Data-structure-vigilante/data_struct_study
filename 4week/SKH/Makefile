@@ -1,5 +1,5 @@
 NAME := main
-SRC := bintree.c
+SRC := bintree.c treeTraversal.c
 TEST_SRC := test.cc
 GTEST_DIR=../../gtest/
 

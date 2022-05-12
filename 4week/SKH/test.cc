@@ -1,4 +1,5 @@
 #include "bintree.h"
+#include "treeTraversal.h"
 #include <gtest/gtest.h>
 // #include "../../../gtest/include/gtest/gtest.h"
 
@@ -43,7 +44,32 @@ TEST(getRootNodeBT, when_NotEmptyTree_expext_rootNode) {
     free(tree);
 }
 
-TEST(insertLeftChildNodeBT, when_parentHaveLeftChild_expect_)
+TEST(PreorderTraversal, Print_preorder) {
+    BinTree *tree;
+    BinTreeNode node;
+
+    node.pLeftChild = NULL;
+    node.pRightChild = NULL;
+
+    node.data = 1;
+    tree = makeBinTree(node);
+    node.data = 2;
+    BinTreeNode *left = insertLeftChildNodeBT(tree->pRootNode, node);
+    node.data = 3;
+    insertLeftChildNodeBT(left, node);
+    node.data = 4;
+    insertRightChildNodeBT(left, node);
+    node.data = 5;
+    insertRightChildNodeBT(tree->pRootNode, node);
+
+    printf("------ preorder -------\n");
+    preorderTraversal(tree->pRootNode, printNode);
+    printf("------ inorder -------\n");
+    inorderTraversal(tree->pRootNode, printNode);
+    printf("------ postorder -------\n");
+    postorderTraversal(tree->pRootNode, printNode);
+}
+
 TEST(Leaks, leaks) { system("leaks test"); }
 
 int main(int argc, char **argv) {
