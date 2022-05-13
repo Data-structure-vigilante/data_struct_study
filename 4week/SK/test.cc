@@ -30,12 +30,34 @@ TEST(addHeapData, when_add_expect_node) {
     heap = createHeap(10);
 
     addHeapData(heap, 10);
-    EXPECT_EQ(heap->pRootNode[0], 10);
-    addHeapData(heap, 20);
-    EXPECT_EQ(heap->pRootNode[0], 20);
     EXPECT_EQ(heap->pRootNode[1], 10);
+    addHeapData(heap, 20);
+    EXPECT_EQ(heap->pRootNode[1], 20);
+    EXPECT_EQ(heap->pRootNode[2], 10);
+    addHeapData(heap, 1);
+    EXPECT_EQ(heap->pRootNode[3], 1);
 
     deleteHeap(heap);
+}
+
+TEST(removeHeapData, when_remove_expect_node) {
+    HeapTree *heap;
+
+    heap = createHeap(10);
+    addHeapData(heap, 1);
+    addHeapData(heap, 2);
+    addHeapData(heap, 3);
+    addHeapData(heap, 4);
+    addHeapData(heap, 5);
+    addHeapData(heap, 6);
+    removeHeapData(heap);
+    EXPECT_EQ(heap->pRootNode[1], 5);
+    removeHeapData(heap);
+    EXPECT_EQ(heap->pRootNode[1], 4);
+    removeHeapData(heap);
+    EXPECT_EQ(heap->pRootNode[1], 3);
+    deleteHeap(heap);
+
 }
 
 TEST(Leaks, leaks) { system("leaks test"); }

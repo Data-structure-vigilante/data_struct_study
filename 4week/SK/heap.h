@@ -20,6 +20,6 @@ typedef struct HeapTreeType {
 HeapTree *createHeap(int maxElementCount);
 void deleteHeap(HeapTree *heap);
 char addHeapData(HeapTree *heap, char data);
-char removeHeapData(HeapTree *heap, char data);
+char removeHeapData(HeapTree *heap);
 
 #endif // HEAP_HPP
