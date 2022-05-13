@@ -36,15 +36,16 @@ HeapNode *insertHeap(Heap *pHeap, HeapNode element) {
     }
 
     idx = pHeap->currentElement + 1;
-    while ((idx != 1) && pHeap->cmp(element, pHeap->pElement[idx])) {
-        pHeap->pElement[idx] = pHeap->pElement[idx / 2];
+    while ((idx != 1) && pHeap->cmp(pHeap->pElement[idx/2], element)) {
+        pHeap->pElement[idx] = pHeap->pElement[idx/2];
         idx /= 2;
     }
+	++pHeap->currentElement;
     pHeap->pElement[idx] = element;
     return &pHeap->pElement[idx];
 }
 
-Bool deleteHeap(Heap *pHeap) {
+Bool popHeap(Heap *pHeap) {
     int idx;
     int child;
     int parent;
@@ -62,16 +63,16 @@ Bool deleteHeap(Heap *pHeap) {
     parent = 1;
     child = 2;
     while (child <= pHeap->currentElement) {
-        if (child < pHeap->currentElement && !HEAP_CMP(child, child + 1))
+        if (child < pHeap->currentElement && HEAP_CMP(child, child + 1))
 					++child;
-				if (cmp(temp, pHeap->pElement[child]))
-					break;
-				pHeap->pElement[parent] = pHeap->pElement[child];
-				parent = child;
-				child *= 2;
+		if (pHeap->cmp(pHeap->pElement[child], temp))
+			break;
+		pHeap->pElement[parent] = pHeap->pElement[child];
+		parent = child;
+		child *= 2;
     }
-		pHeap->pElement[parent] = temp;
-		return TRUE;
+	pHeap->pElement[parent] = temp;
+	return TRUE;
 }
 
 HeapNode *getRootNodeHeap(Heap *pHeap) {
@@ -82,6 +83,12 @@ HeapNode *getRootNodeHeap(Heap *pHeap) {
     return &pHeap->pElement[1];
 }
 
+void deleteHeap(Heap *pHeap) {
+	free(pHeap->pElement);
+	pHeap->pElement = NULL;
+	free(pHeap);
+}
+
 void printHeap(Heap *pHeap, void (*printNode)(HeapNode*)) {
 	printf("** Print Heap **\n");
 	for(int i = 1; i <= pHeap->currentElement; ++i) {
@@ -89,5 +96,5 @@ void printHeap(Heap *pHeap, void (*printNode)(HeapNode*)) {
 		printNode(&pHeap->pElement[i]);
 		printf("] ");
 	}
-	printf("\n** Print End **\n")
+	printf("\n** Print End **\n");
 }

@@ -16,8 +16,9 @@ typedef enum BoolEnum { FALSE, TRUE } Bool;
 
 Heap *createHeap(int maxElement, int (*cmp)(HeapNode, HeapNode));
 HeapNode *insertHeap(Heap *pHeap, HeapNode element);
-Bool deleteHeap(Heap *pHeap);
+Bool popHeap(Heap *pHeap);
 HeapNode *getRootNodeHeap(Heap *pHeap);
+void deleteHeap(Heap *pHeap);
 void printHeap(Heap *pHeap, void (*printNode)(HeapNode *));
 
 #endif
