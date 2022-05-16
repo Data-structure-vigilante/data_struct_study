@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 typedef struct BinTreeNodeType {
-    char data;
+    int data;
     int visited;
     struct BinTreeNodeType *pLeftChild;
     struct BinTreeNodeType *pRightChild;

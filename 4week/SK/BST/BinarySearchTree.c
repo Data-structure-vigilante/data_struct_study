@@ -24,12 +24,12 @@ BinTreeNode *searchParentNode(BinTree *tree, int data) {
     BinTreeNode *pNodeParent;
     pNode = tree->pRootNode;
     pNodeParent = pNode;
-    while (pNode || pNode->data != data) {
+    while (pNode && pNode->data != data) {
         pNodeParent = pNode;
         if (pNode->data > data) {
-            pNode = getLeftChildNodeBT(node);
+            pNode = getLeftChildNodeBT(pNode);
         } else if (pNode->data < data) {
-            pNode = getRightChildNodeBT(node);
+            pNode = getRightChildNodeBT(pNode);
         }
     }
     if (pNode == NULL)
@@ -47,9 +47,9 @@ int addTreeData(BinTree *tree, BinTreeNode node) {
     while (pNode) {
         pNodeParent = pNode;
         if (pNode->data > node.data) {
-            pNode = getLeftChildNodeBT(node);
+            pNode = getLeftChildNodeBT(pNode);
         } else if (pNode->data < node.data) {
-            pNode = getRightChildNodeBT(node);
+            pNode = getRightChildNodeBT(pNode);
         }
     }
     if (pNodeParent->data > node.data) {
@@ -65,11 +65,11 @@ int removeTreeNode(BinTree *tree, int data) {
 
     BinTreeNode *pNode;
     BinTreeNode *parent;
-    BinTreeNdoe *tempParent;
+    BinTreeNode *tempParent;
     BinTreeNode *temp;
     parent = searchParentNode(tree, data);
     pNode = searchTreeNode(tree, data);
-    if (parent == pNode){
+    if (parent == pNode && !parent->pLeftChild && !parent->pRightChild){
         deleteBinTree(tree);
         return TRUE;
     }
@@ -77,7 +77,7 @@ int removeTreeNode(BinTree *tree, int data) {
         return FALSE;
     if (pNode->pLeftChild == NULL && pNode->pRightChild == NULL)
     {
-        deleteBinTreeNode(pNode)
+        deleteBinTreeNode(pNode);
         if(data < parent->data)
             parent->pLeftChild = NULL;
         else
@@ -88,7 +88,7 @@ int removeTreeNode(BinTree *tree, int data) {
         if (pNode->pLeftChild == NULL)
             temp = pNode->pRightChild;
         else
-            temp = pNode->pLightChild;
+            temp = pNode->pLeftChild;
         if (data < parent->data)
             parent->pLeftChild = temp;
         else
@@ -106,8 +106,8 @@ int removeTreeNode(BinTree *tree, int data) {
         if (temp == pNode->pLeftChild)
         {
             pNode->data = temp->data;
+            pNode->pLeftChild = temp->pLeftChild;
             free(temp);
-            pNode->pLeftChild = NULL;
         }
         else
         {
