@@ -3,7 +3,9 @@
 
 #include "binTree.h"
 
-BinTreeNode* insertBST(BinTree* pBinTree, BinTreeNode element);
-BinTreeNode* searchBST(BinTree* pBinTree, char key);
+BinTreeNode* searchTreeNode(BinTree *pBinTree, int data);
+BinTreeNode* searchParentNode(BinTree *pBinTree, int data);
+int addTreeData(BinTree *tree, BinTreeNode node);
+int removeTreeNode(BinTree *tree, int data);
 
 #endif
