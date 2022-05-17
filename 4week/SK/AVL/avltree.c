@@ -53,6 +53,7 @@ static void insertRecursive(AVLTreeNode *root, AVLTreeNode newNode,
     }
     return root;
 }
+
 // 삭제
 AVLTreeNode *deleteAVL(AVLTree *tree, int data);
 
@@ -60,7 +61,63 @@ AVLTreeNode *deleteAVL(AVLTree *tree, int data);
 AVLTreeNode *searchAVL(AVLTree *tree, int data);
 
 // utils
-void leftBalance();
-void rightBalance();
-Bool rightRotate();
-Bool leftRotate();
+void leftBalance(AVLTreeNode *topNode){
+    if (getBalanceFactor(topNode->pLeftChild) > 0)
+        rightRotate(topNode);
+    else{
+        leftRotate(topNode->pLeftChild);
+        rightRotate(topNode);
+    }
+}
+
+void rightBalance(AVLTreeNode *topNode){
+    if (getBalanceFactor(topNode->pRightChild) < 0)
+        leftRotate(topNode);
+    else{
+        rightRotate(topNode->pRightChild);
+        leftBalance(topNode);
+    }
+}
+
+// function rotateRight (root):
+//   exchange left subtree with right subtree of left subtree
+//   make left subtree a new root
+// function rotateLeft (root):
+//   exchange right subtree with left subtree of right subtree
+//   make right subtree a new root
+
+void rightRotate(AVLTreeNode *top){
+    AVLTreeNode *parent;
+    AVLTreeNode *middle;
+    AVLTreeNode *bottom;
+
+    parent = top->pParent;
+    middle = top->pLeftChild;
+    bottom = middle->pLeftChild;
+    if (top == parent->pLeftChild)
+        parent->pLeftChild = middle;
+    else
+        parent->pRightChild = middle;
+    middle->pParent = parent;
+    top->pLeftChild = middle->pRightChild;
+    middle->pRightChild = top;
+    top->pParent = middle;
+}
+
+void leftRotate(AVLTreeNode *top){
+    AVLTreeNode *parent;
+    AVLTreeNode *middle;
+    AVLTreeNode *bottom;
+
+    parent = top->pParent;
+    middle = top->pRightChild;
+    bottom = middle->pRightChild;
+    if (top == parent->pLeftChild)
+        parent->pLeftChild = middle;
+    else
+        parent->pRightChild = middle;
+    middle->pParent = parent;
+    top->pRightChild = middle->pLeftChild;
+    middle->pLeftChild = top;
+    top->pParent = middle;
+}
