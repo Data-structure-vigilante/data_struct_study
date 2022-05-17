@@ -2,8 +2,8 @@
 #define __AVL_H__
 
 // C program to insert a node in AVL tree
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 // An AVL tree node
 typedef struct AvlTreeNodeType
@@ -16,10 +16,11 @@ typedef struct AvlTreeNodeType
 
 typedef struct AvlTreeType
 {
-	AvlTreeNode* root;
+	AvlTreeNode *root;
 } AvlTree;
 
-AvlTree* createTree();
-AvlTreeNode* insertNode(AvlTree* pTree, int key);
+AvlTree *createTree();
+AvlTreeNode *insertNode(AvlTree *pTree, int key);
+AvlTreeNode *deleteNode(AvlTree *pTree, int key);
 
 #endif

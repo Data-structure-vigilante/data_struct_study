@@ -3,26 +3,32 @@
 #include <stdio.h>
 #include <math.h>
 
-static AvlTreeNode* createNode(int key);
-static AvlTreeNode* insert(AvlTreeNode* node, int key);
-static int getBalance(AvlTreeNode* node);
-static int getHeight(AvlTreeNode* node);
-static AvlTreeNode* RightRotate(AvlTreeNode* node);
-static AvlTreeNode* LeftRotate(AvlTreeNode* node);
+static AvlTreeNode *createNode(int key);
+static AvlTreeNode *insert(AvlTreeNode *node, int key);
+static AvlTreeNode *delete (AvlTreeNode *root, int key);
+static int getBalance(AvlTreeNode *node);
+static int getHeight(AvlTreeNode *node);
+static AvlTreeNode *RightRotate(AvlTreeNode *node);
+static AvlTreeNode *LeftRotate(AvlTreeNode *node);
+static AvlTreeNode *minValueNode(AvlTreeNode *node);
+static AvlTreeNode *search(AvlTreeNode node, int key);
 
-AvlTree* createTree() {
-	AvlTree* tree;
+AvlTree *createTree()
+{
+	AvlTree *tree;
 
-	tree = (AvlTree*)calloc(1, sizeof(AvlTree));
+	tree = (AvlTree *)calloc(1, sizeof(AvlTree));
 	if (tree == NULL)
 		perror("Tree make fail\n");
 	return tree;
 }
 
-AvlTreeNode* insertNode(AvlTree* pTree, int key) {
-	AvlTreeNode* node;
+AvlTreeNode *insertNode(AvlTree *pTree, int key)
+{
+	AvlTreeNode *node;
 
-	if (pTree == NULL) {
+	if (pTree == NULL)
+	{
 		fprintf(stderr, "insert tree is null\n");
 		return NULL;
 	}
@@ -31,61 +37,50 @@ AvlTreeNode* insertNode(AvlTree* pTree, int key) {
 	return pTree->root;
 }
 
-AvlTreeNode* insert(AvlTreeNode* pNode, int key)
+AvlTreeNode *deleteNode(AvlTree *pTree, int key)
 {
-	/* 1. Perform the normal BST insertion */
-	if (node == NULL)
-		return(newNode(key));
+	AvlTreeNode *node;
 
-	if (key < node->key)
-		node->left = insert(node->left, key);
-	else if (key > node->key)
-		node->right = insert(node->right, key);
-	else // Equal keys are not allowed in BST
-		return node;
-
-	/* 2. Update height of this ancestor node */
-	node->height = height(node);
-
-	/* 3. Get the balance factor of this ancestor
-		node to check whether this node became
-		unbalanced */
-	int balance = getBalance(node);
-
-	// If this node becomes unbalanced, then
-	// there are 4 cases
-
-	// Left Left Case
-	if (balance > 1 && key < node->left->key)
-		return rightRotate(node);
-
-	// Right Right Case
-	if (balance < -1 && key > node->right->key)
-		return leftRotate(node);
-
-	// Left Right Case
-	if (balance > 1 && key > node->left->key)
+	if (pTree == NULL)
 	{
-		node->left = leftRotate(node->left);
-		return rightRotate(node);
+		fprintf(stderr, "delete tree is null\n");
+		return NULL;
 	}
 
-	// Right Left Case
-	if (balance < -1 && key < node->right->key)
-	{
-		node->right = rightRotate(node->right);
-		return RightRotate(node);
-	}
-
-	/* return the (unchanged) node pointer */
-	return node;
+	pTree->root = insert(pTree->root, key);
+	return pTree->root;
 }
 
-static AvlTreeNode* createNode(int key) {
-	AvlTreeNode* node;
-	
-	node = (AvlTreeNode*)calloc(1, sizeof(AvlTree));
-	if (node == NULL) {
+AvlTreeNode *searchNode(AvlTree *pTree, int key)
+{
+	if (pTree == NULL)
+	{
+		fprintf(stderr, "delete tree is null\n");
+		return NULL;
+	}
+
+	return (search(pTree->root, key));
+}
+
+static AvlTreeNode *search(AvlTreeNode *node, int key)
+{
+	if (node == NULL)
+		return node;
+	if (key < node->key)
+		return (search(node->left, key));
+	else if (key > node->key)
+		return (search(node->right, key));
+	else
+		return node;
+}
+
+static AvlTreeNode *createNode(int key)
+{
+	AvlTreeNode *node;
+
+	node = (AvlTreeNode *)calloc(1, sizeof(AvlTree));
+	if (node == NULL)
+	{
 		perror("Node make fail\n");
 		return NULL;
 	}
@@ -93,16 +88,16 @@ static AvlTreeNode* createNode(int key) {
 	return node;
 }
 
-static AvlTreeNode* insert(AvlTreeNode* node,int key) {
+static AvlTreeNode *insert(AvlTreeNode *node, int key)
+{
 	if (node == NULL)
 		return createNode(key);
-	
 	if (key < node->key)
 		node->left = insert(node->left, key);
 	else if (key > node->key)
 		node->right = insert(node->right, key);
 	else
-		 return node;
+		return node;
 
 	node->height = getHeight(node);
 
@@ -110,109 +105,133 @@ static AvlTreeNode* insert(AvlTreeNode* node,int key) {
 
 	// LL Case
 	if (balance > 1 && key < node->left->key)
-		return leftRotate(node);
-
+		return RightRotate(node);
+	// LR Case
+	if (balance > 1 && key < node->left->key)
+	{
+		node->left = LeftRotate(node->left);
+		return RightRotate(node);
+	}
+	// RR Case
+	if (balance < -1 && key < node->right->key)
+		return LeftRotate(node);
+	// RL Case
+	if (balance < -1 && key < node->right->key)
+	{
+		node->right = RightRotate(node->right);
+		return LeftRotate(node);
+	}
+	return node;
 }
 
-static int getBalance(AvlTreeNode* node) {
+static int getBalance(AvlTreeNode *node)
+{
 	if (node == NULL)
 		return 0;
 	return getHeight(node->left) - getHeight(node->right);
 }
 
-static int getHeight(AvlTreeNode* node) {
+static int getHeight(AvlTreeNode *node)
+{
 	if (node == NULL)
 		return 0;
 	return 1 + max(getHeight(node->left), getHeight(node->right));
 }
 
-// A utility function to right rotate subtree rooted with y
-// See the diagram given above.
-struct Node *rightRotate(struct Node *y)
+static AvlTreeNode *RightRotate(AvlTreeNode *grandparent)
 {
-	struct Node *x = y->left;
-	struct Node *T2 = x->right;
+	AvlTreeNode *parent;
+	AvlTreeNode *child;
 
-	// Perform rotation
-	x->right = y;
-	y->left = T2;
+	parent = grandparent->left;
+	child = parent->right;
+	parent->right = grandparent;
+	grandparent->left = child;
 
-	// Update heights
-	y->height = height(y);
-	x->height = height(x);
-
-	// Return new root
-	return x;
+	grandparent->height = height(grandparent);
+	parent->height = height(parent);
+	return (parent);
 }
 
-// A utility function to left rotate subtree rooted with x
-// See the diagram given above.
-struct Node *leftRotate(struct Node *x)
+static AvlTreeNode *LeftRotate(AvlTreeNode *grandparent)
 {
-	struct Node *y = x->right;
-	struct Node *T2 = y->left;
+	AvlTreeNode *parent;
+	AvlTreeNode *child;
 
-	// Perform rotation
-	y->left = x;
-	x->right = T2;
+	parent = grandparent->right;
+	child = parent->left;
+	parent->left = grandparent;
+	grandparent->right = child;
 
-	// Update heights
-	x->height = height(x);
-	y->height = height(y);
-
-	// Return new root
-	return y;
+	grandparent->height = height(grandparent);
+	parent->height = height(parent);
+	return (parent);
 }
 
-// Get Balance factor of node N
-int getBalance(struct Node *N)
+static AvlTreeNode *minValueNode(AvlTreeNode *node)
 {
-	if (N == NULL)
-		return 0;
-	return height(N->left) - height(N->right);
+	while (node->left != NULL)
+		node = node->left;
+	return (node);
 }
 
-// Recursive function to insert a key in the subtree rooted
-// with node and returns the new root of the subtree.
-
-
-// A utility function to print preorder traversal
-// of the tree.
-// The function also prints height of every node
-void preOrder(struct Node *root)
+static AvlTreeNode *delete (AvlTreeNode *root, int key)
 {
-	if(root != NULL)
+	if (root = NULL)
+		return root;
+	if (key < root->key)
+		root->left = delete (root->left, key);
+	else if (key > root->key)
+		root->right = delete (root->right, key);
+	else
 	{
-		printf("%d ", root->key);
-		preOrder(root->left);
-		preOrder(root->right);
+		if (root->left == NULL || root->right == NULL)
+		{
+			AvlTreeNode *child;
+
+			child = root->left ? root->left : root->right;
+
+			if (child == NULL)
+			{
+				child = root;
+				root = NULL;
+			}
+			else
+				*root = *child;
+			free(child);
+		}
+		else
+		{
+			AvlTreeNode *minNode;
+
+			minNode = minValueNode(root->right);
+			root->key = minNode->key;
+			root->right = delete (root->right, minNode->key);
+		}
 	}
-}
+	if (root == NULL)
+		return root;
+	root->height = getHeight(root);
 
-/* Driver program to test above function*/
-int main()
-{
-struct Node *root = NULL;
+	int balance = getBalance(root);
 
-/* Constructing tree given in the above figure */
-root = insert(root, 10);
-root = insert(root, 20);
-root = insert(root, 30);
-root = insert(root, 40);
-root = insert(root, 50);
-root = insert(root, 25);
-
-/* The constructed AVL Tree would be
-			30
-		/ \
-		20 40
-		/ \	 \
-	10 25 50
-*/
-
-printf("Preorder traversal of the constructed AVL"
-		" tree is \n");
-preOrder(root);
-
-return 0;
+	// LL Case
+	if (balance > 1 && key < root->left->key)
+		return RightRotate(root);
+	// LR Case
+	if (balance > 1 && key < root->left->key)
+	{
+		root->left = LeftRotate(root->left);
+		return RightRotate(root);
+	}
+	// RR Case
+	if (balance < -1 && key < root->right->key)
+		return LeftRotate(root);
+	// RL Case
+	if (balance < -1 && key < root->right->key)
+	{
+		root->right = RightRotate(root->right);
+		return LeftRotate(root);
+	}
+	return root;
 }
