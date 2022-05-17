@@ -1,26 +1,23 @@
-#include "bst.h"
-#include "binTree.h"
+#include "avl.h"
 #include <gtest/gtest.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-TEST(bstTest, insertBST) {
-	BinTreeNode	temp;
+TEST(AVLTest, integrationAVL) {
+	AvlTree *tree;
 
-	temp.data = 5;
-	temp.pLeftChild = NULL;
-	temp.pRightChild = NULL;
-	BinTree*	tree = makeBinTree(temp);
-	for (int i=0;i<5;i++) {
-		temp.data = i;
-		EXPECT_EQ(insertBST(tree, temp)->data, i);
-	}
-	for (int i=0;i<=5;i++) {
-		temp.data = i;
-		free(deleteBST(tree, temp));
-	}
-	free(tree);
+	tree = createTree();
+	for(int i=1;i<=7;i++)
+		insertNode(tree, i);
+	EXPECT_EQ(searchNode(tree, 1)->height, 1);
+	EXPECT_EQ(searchNode(tree, 2)->height, 2);
+	EXPECT_EQ(searchNode(tree, 3)->height, 1);
+	EXPECT_EQ(searchNode(tree, 4)->height, 3);
+	EXPECT_EQ(searchNode(tree, 5)->height, 1);
+	EXPECT_EQ(searchNode(tree, 6)->height, 2);
+	EXPECT_EQ(searchNode(tree, 7)->height, 0);
+	deleteTree(tree);
 }
 
 int main(int argc, char **argv) {

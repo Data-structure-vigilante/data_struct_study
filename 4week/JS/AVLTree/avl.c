@@ -1,17 +1,19 @@
 #include "avl.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <math.h>
 
 static AvlTreeNode *createNode(int key);
 static AvlTreeNode *insert(AvlTreeNode *node, int key);
-static AvlTreeNode *delete (AvlTreeNode *root, int key);
+static AvlTreeNode *remove (AvlTreeNode *root, int key);
 static int getBalance(AvlTreeNode *node);
 static int getHeight(AvlTreeNode *node);
 static AvlTreeNode *RightRotate(AvlTreeNode *node);
 static AvlTreeNode *LeftRotate(AvlTreeNode *node);
 static AvlTreeNode *minValueNode(AvlTreeNode *node);
-static AvlTreeNode *search(AvlTreeNode node, int key);
+static AvlTreeNode *search(AvlTreeNode *node, int key);
+static void deleteBinTreeNode(AvlTreeNode* pNode);
+static void deletePostOrder(AvlTreeNode *pNode);
+static int max(int a, int b);
 
 AvlTree *createTree()
 {
@@ -62,6 +64,37 @@ AvlTreeNode *searchNode(AvlTree *pTree, int key)
 	return (search(pTree->root, key));
 }
 
+void deleteTree(AvlTree *pTree) {
+	if (pTree == NULL) {
+		fprintf(stderr, "pTree address is null\n");
+		return;
+	}
+	deletePostOrder(pTree->root);
+	pTree->root = NULL;
+	free(pTree);
+}
+
+static void deleteBinTreeNode(AvlTreeNode* pNode) {
+	if (pNode == NULL) {
+		fprintf(stderr, "pNode address is null\n");
+		return;
+	}
+	free(pNode);
+}
+
+static void deletePostOrder(AvlTreeNode* pNode) {
+	if (pNode == NULL) {
+		fprintf(stderr, "pNode address is null\n");
+		return;
+	}
+
+	if (pNode->left != NULL)
+		deletePostOrder(pNode->left);
+	if (pNode->right != NULL)
+		deletePostOrder(pNode->right);
+	deleteBinTreeNode(pNode);
+}
+
 static AvlTreeNode *search(AvlTreeNode *node, int key)
 {
 	if (node == NULL)
@@ -78,7 +111,7 @@ static AvlTreeNode *createNode(int key)
 {
 	AvlTreeNode *node;
 
-	node = (AvlTreeNode *)calloc(1, sizeof(AvlTree));
+	node = (AvlTreeNode *)calloc(1, sizeof(AvlTreeNode));
 	if (node == NULL)
 	{
 		perror("Node make fail\n");
@@ -92,6 +125,7 @@ static AvlTreeNode *insert(AvlTreeNode *node, int key)
 {
 	if (node == NULL)
 		return createNode(key);
+
 	if (key < node->key)
 		node->left = insert(node->left, key);
 	else if (key > node->key)
@@ -107,13 +141,13 @@ static AvlTreeNode *insert(AvlTreeNode *node, int key)
 	if (balance > 1 && key < node->left->key)
 		return RightRotate(node);
 	// LR Case
-	if (balance > 1 && key < node->left->key)
+	if (balance > 1 && key > node->left->key)
 	{
 		node->left = LeftRotate(node->left);
 		return RightRotate(node);
 	}
 	// RR Case
-	if (balance < -1 && key < node->right->key)
+	if (balance < -1 && key > node->right->key)
 		return LeftRotate(node);
 	// RL Case
 	if (balance < -1 && key < node->right->key)
@@ -148,8 +182,8 @@ static AvlTreeNode *RightRotate(AvlTreeNode *grandparent)
 	parent->right = grandparent;
 	grandparent->left = child;
 
-	grandparent->height = height(grandparent);
-	parent->height = height(parent);
+	grandparent->height = getHeight(grandparent);
+	parent->height = getHeight(parent);
 	return (parent);
 }
 
@@ -163,8 +197,8 @@ static AvlTreeNode *LeftRotate(AvlTreeNode *grandparent)
 	parent->left = grandparent;
 	grandparent->right = child;
 
-	grandparent->height = height(grandparent);
-	parent->height = height(parent);
+	grandparent->height = getHeight(grandparent);
+	parent->height = getHeight(parent);
 	return (parent);
 }
 
@@ -175,14 +209,14 @@ static AvlTreeNode *minValueNode(AvlTreeNode *node)
 	return (node);
 }
 
-static AvlTreeNode *delete (AvlTreeNode *root, int key)
+static AvlTreeNode *remove(AvlTreeNode *root, int key)
 {
 	if (root = NULL)
 		return root;
 	if (key < root->key)
-		root->left = delete (root->left, key);
+		root->left = remove(root->left, key);
 	else if (key > root->key)
-		root->right = delete (root->right, key);
+		root->right = remove(root->right, key);
 	else
 	{
 		if (root->left == NULL || root->right == NULL)
@@ -206,7 +240,7 @@ static AvlTreeNode *delete (AvlTreeNode *root, int key)
 
 			minNode = minValueNode(root->right);
 			root->key = minNode->key;
-			root->right = delete (root->right, minNode->key);
+			root->right = remove(root->right, minNode->key);
 		}
 	}
 	if (root == NULL)
@@ -219,13 +253,13 @@ static AvlTreeNode *delete (AvlTreeNode *root, int key)
 	if (balance > 1 && key < root->left->key)
 		return RightRotate(root);
 	// LR Case
-	if (balance > 1 && key < root->left->key)
+	if (balance > 1 && key > root->left->key)
 	{
 		root->left = LeftRotate(root->left);
 		return RightRotate(root);
 	}
 	// RR Case
-	if (balance < -1 && key < root->right->key)
+	if (balance < -1 && key > root->right->key)
 		return LeftRotate(root);
 	// RL Case
 	if (balance < -1 && key < root->right->key)
@@ -234,4 +268,11 @@ static AvlTreeNode *delete (AvlTreeNode *root, int key)
 		return LeftRotate(root);
 	}
 	return root;
+}
+
+static int max(int a, int b) {
+	int v;
+
+	v = a > b ? a : b;
+	return v;
 }

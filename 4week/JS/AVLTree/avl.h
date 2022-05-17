@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 // An AVL tree node
 typedef struct AvlTreeNodeType
 {
@@ -21,6 +22,8 @@ typedef struct AvlTreeType
 
 AvlTree *createTree();
 AvlTreeNode *insertNode(AvlTree *pTree, int key);
+AvlTreeNode *searchNode(AvlTree *pTree, int key);
 AvlTreeNode *deleteNode(AvlTree *pTree, int key);
+void deleteTree(AvlTree *pTree);
 
 #endif
