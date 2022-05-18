@@ -4,6 +4,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef enum BoolType {
+    FALSE,
+    TRUE
+} Bool;
+
 typedef struct AVLTreeNodeType {
     int height;
     int data;
@@ -29,15 +34,6 @@ void deleteAVLTree(AVLTree *pAVLTree);
 void deleteNodeRecursive(AVLTreeNode *node);
 void deleteAVLTreeNode(AVLTreeNode *pNode);
 AVLTreeNode *createNode(AVLTreeNode element);
-
-#endif
-
-#ifndef _COMMON_TREE_DEF_
-#define _COMMON_TREE_DEF_
-
-typedef enum BoolType {
-    FALSE,
-    TRUE
-} Bool
+Bool isEmptyAVLTree(AVLTree *tree);
 
 #endif

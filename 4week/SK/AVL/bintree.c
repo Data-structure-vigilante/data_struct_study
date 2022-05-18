@@ -1,4 +1,4 @@
-#include "AVLTree.h"
+#include "bintree.h"
 
 AVLTree *makeAVLTree() {
     AVLTree *tree;
@@ -25,6 +25,10 @@ AVLTree *makeAVLTree() {
 
 int isSameNode(AVLTreeNode *aNode, AVLTreeNode *bNode) {
     return (aNode == bNode);
+}
+
+Bool isEmptyAVLTree(AVLTree *tree){
+    return (isSameNode(tree->pRootNode, tree->nilNode));
 }
 
 AVLTreeNode *getRootNodeBT(AVLTree *pAVLTree) {

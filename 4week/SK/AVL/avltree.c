@@ -1,7 +1,22 @@
 #include "avltree.h"
 
+static void insertRootNode(AVLTree *tree, AVLTreeNode element)
+{
+    tree->pRootNode = createNode(element);
+    tree->pRootNode->pParent = tree->nilNode;
+    tree->pRootNode->pLeftChild = tree->nilNode;
+    tree->pRootNode->pRightChild = tree->nilNode;
+}
+
 // 삽입
-AVLTreeNode *insertAVL(AVLTree *tree, AVLTreeNode element) {}
+AVLTreeNode *insertAVL(AVLTree *tree, AVLTreeNode element) {
+    if (tree == NULL)
+    return  NULL;
+    if (isEmptyAVLTree(tree))
+        return insertRootNode(tree, element);
+    else
+        return insertRecursive(tree->pRootNode, element, tree->nilNode);
+}
 
 Bool isNilNode(AVLTreeNode *node) { return (node == node->pParent); }
 
@@ -14,15 +29,15 @@ int isTimeToInsert(AVLTreeNode *node, AVLTreeNode *newNode) {
             (node->data < newNode->data && isNilNode(node->pRightChild)));
 }
 
-static void insertNode(AVLTreeNode *parent, AVLTreeNode newNode,
+static AVLTreeNode *insertNode(AVLTreeNode *parent, AVLTreeNode newNode,
                        AVLTreeNode *nilNode) {
     newNode.pLeftChild = nilNode;
     newNode.pRightChild = nilNode;
     newNode.height = 1;
     if (isNilNode(parent->pLeftChild))
-        insertLeftChildNodeBT(parent, newNode);
+        return insertLeftChildNodeBT(parent, newNode);
     else
-        insertRightChildNodeBT(parent, newNode);
+        return insertRightChildNodeBT(parent, newNode);
 }
 
 int getBalanceFactor(AVLTreeNode *node) {
@@ -33,25 +48,26 @@ void updateHeight(AVLTreeNode *node) {
 	node->height = max(node->pLeftChild->height, node->pRightChild->height) + 1;
 }
 
-static void insertRecursive(AVLTreeNode *root, AVLTreeNode newNode,
+static AVLTreeNode *insertRecursive(AVLTreeNode *root, AVLTreeNode newNode,
                             AVLTreeNode *nilNode) {
 
+    AVLTreeNode *newLeaf;
+
     if (isTimeToInsert(root, &newNode)) {
-        insertNode(root, newNode, nilNode);
-        return root;
+        return insertNode(root, newNode, nilNode);
     }
     if (newNode.data < root->data) {
-        insertRecursive(root->pLeftChild, newNode, nilNode);
+        newLeaf = insertRecursive(root->pLeftChild, newNode, nilNode);
         updateHeight(root);
         if (getBalanceFactor(root) > 1)
             leftBalance(root);
     } else {
-        insertRecursive(root->pRightChild, newNode, nilNode);
+        newLeaf = insertRecursive(root->pRightChild, newNode, nilNode);
         updateHeight(root);
         if (getBalanceFactor(root) < -1)
             rightBalance(root);
     }
-    return root;
+    return newLeaf;
 }
 
 // 삭제
@@ -79,13 +95,6 @@ void rightBalance(AVLTreeNode *topNode){
     }
 }
 
-// function rotateRight (root):
-//   exchange left subtree with right subtree of left subtree
-//   make left subtree a new root
-// function rotateLeft (root):
-//   exchange right subtree with left subtree of right subtree
-//   make right subtree a new root
-
 void rightRotate(AVLTreeNode *top){
     AVLTreeNode *parent;
     AVLTreeNode *middle;
@@ -102,6 +111,9 @@ void rightRotate(AVLTreeNode *top){
     top->pLeftChild = middle->pRightChild;
     middle->pRightChild = top;
     top->pParent = middle;
+    updateHeight(middle->pLeftChild);
+    updateHeight(middle->pRightChild);
+    updateHeight(middle);
 }
 
 void leftRotate(AVLTreeNode *top){
@@ -120,4 +132,7 @@ void leftRotate(AVLTreeNode *top){
     top->pRightChild = middle->pLeftChild;
     middle->pLeftChild = top;
     top->pParent = middle;
+    updateHeight(middle->pLeftChild);
+    updateHeight(middle->pRightChild);
+    updateHeight(middle);
 }

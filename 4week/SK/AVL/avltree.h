@@ -10,7 +10,7 @@ AVLTreeNode *deleteAVL(AVLTree *tree, int data);
 AVLTreeNode *searchAVL(AVLTree *tree, int data);
 
 // utils
-void leftBalance();
-void rightBalance();
-Bool rightRotate();
-Bool leftRotate();
+void leftBalance(AVLTreeNode *topNode);
+void rightBalance(AVLTreeNode *topNode);
+void rightRotate(AVLTreeNode *top);
+void leftRotate(AVLTreeNode *top);
