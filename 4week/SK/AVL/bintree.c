@@ -27,7 +27,7 @@ int isSameNode(AVLTreeNode *aNode, AVLTreeNode *bNode) {
     return (aNode == bNode);
 }
 
-Bool isEmptyAVLTree(AVLTree *tree){
+int isEmptyAVLTree(AVLTree *tree){
     return (isSameNode(tree->pRootNode, tree->nilNode));
 }
 

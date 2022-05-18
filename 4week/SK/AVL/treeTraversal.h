@@ -1,7 +1,7 @@
 #if !defined(TREETRAVERSAL_HPP)
 #define TREETRAVERSAL_HPP
 
-#include "AVLTree.h"
+#include "avltree.h"
 
 void preorderTraversal(AVLTreeNode *node, void (*f)(AVLTreeNode *));  // V L R
 void inorderTraversal(AVLTreeNode *node, void (*f)(AVLTreeNode *));   // L V R

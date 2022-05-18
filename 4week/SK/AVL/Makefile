@@ -1,16 +1,16 @@
 NAME := main
-SRC := AVLTree.c treeTraversal.c heap.c avltree.c
+SRC := avltree.c bintree.c
 TEST_SRC := test.cc
 GTEST_DIR=../../gtest/
 
 all: ${NAME}
 
 test: ${SRC} ${TEST_SRC}
-	g++ -o test ${SRC} ${TEST_SRC} -pthread -lgtest -std=c++11
+	g++ -o test ${SRC} ${TEST_SRC} -pthread -lgtest -std=c++11 -g3 -fsanitize=address
 	./test
 	rm test
 
-${NAME}: main.c arraylist.c
-	gcc -fdiagnostics-color=always -g *.c -o main
+${NAME}: main.c ${SRC}
+	gcc -fdiagnostics-color=always -g main.c ${SRC} -o main
 
 .PHONY: all test

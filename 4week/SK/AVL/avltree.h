@@ -8,9 +8,3 @@ AVLTreeNode *deleteAVL(AVLTree *tree, int data);
 
 // 검색
 AVLTreeNode *searchAVL(AVLTree *tree, int data);
-
-// utils
-void leftBalance(AVLTreeNode *topNode);
-void rightBalance(AVLTreeNode *topNode);
-void rightRotate(AVLTreeNode *top);
-void leftRotate(AVLTreeNode *top);
