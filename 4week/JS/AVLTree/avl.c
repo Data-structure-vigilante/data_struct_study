@@ -89,7 +89,7 @@ AvlTreeNode *deleteNode(AvlTree *pTree, int key)
 		return NULL;
 	}
 
-	pTree->root = insert(pTree->root, key);
+	pTree->root = remove(pTree->root, key);
 	return pTree->root;
 }
 
