@@ -95,7 +95,7 @@ AvlTreeNode *deleteNode(AvlTree *pTree, int key)
 
 static AvlTreeNode *remove(AvlTreeNode *root, int key)
 {
-	if (root = NULL)
+	if (root == NULL)
 		return root;
 	if (key < root->key)
 		root->left = remove(root->left, key);
