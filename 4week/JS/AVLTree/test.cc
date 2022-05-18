@@ -8,15 +8,17 @@ TEST(AVLTest, integrationAVL) {
 	AvlTree *tree;
 
 	tree = createTree();
-	for(int i=1;i<=7;i++)
+	for(int i=1;i<=9;i++)
 		insertNode(tree, i);
 	EXPECT_EQ(searchNode(tree, 1)->height, 1);
 	EXPECT_EQ(searchNode(tree, 2)->height, 2);
 	EXPECT_EQ(searchNode(tree, 3)->height, 1);
-	EXPECT_EQ(searchNode(tree, 4)->height, 3);
+	EXPECT_EQ(searchNode(tree, 4)->height, 4);
 	EXPECT_EQ(searchNode(tree, 5)->height, 1);
-	EXPECT_EQ(searchNode(tree, 6)->height, 2);
-	EXPECT_EQ(searchNode(tree, 7)->height, 0);
+	EXPECT_EQ(searchNode(tree, 6)->height, 3);
+	EXPECT_EQ(searchNode(tree, 7)->height, 1);
+	EXPECT_EQ(searchNode(tree, 8)->height, 2);
+	EXPECT_EQ(searchNode(tree, 9)->height, 1);
 	deleteTree(tree);
 }
 
