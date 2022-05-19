@@ -1,0 +1,6 @@
+{
+	"files.associations": {
+		"avltree.h": "c",
+		"stdlib.h": "c"
+	}
+}
