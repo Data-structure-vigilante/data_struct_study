@@ -3,40 +3,30 @@
 
 typedef struct ArrayGraphType
 {
-	int maxVertexCount;		// �ִ� ��� ����
-	int currentVertexCount;	// ���� ���Ǵ� ����� ����
-	int graphType;			// �׷��� ����: 1-Undirected, 2-Directed
-	int **ppAdjEdge;		// ���� ������ ���� 2���� array
-	int *pVertex;			// ��� ������ ���� 1���� array
+	int maxVertexCount;
+	int currentVertexCount;
+	int graphType;			
+	int **ppAdjEdge;		
+	int *pVertex;			
 } ArrayGraph;
 
-// �׷��� ����
+
 ArrayGraph* createArrayGraph(int maxVertexCount);
 ArrayGraph* createArrayDirectedGraph(int maxVertexCount);
 
-// �׷��� ����
+
 void deleteArrayGraph(ArrayGraph* pGraph);
 
-// ���� �׷��� ���� �Ǵ�
-int isEmptyAG(ArrayGraph* pGraph);
-
-// ��� �߰�
+int isEmptyAG(ArrayGraph* pGraph)
 int addVertexAG(ArrayGraph* pGraph, int vertexID);
-
-// ���� �߰�
 int addEdgeAG(ArrayGraph* pGraph, int fromVertexID, int toVertexID);
 int addEdgewithWeightAG(ArrayGraph* pGraph, int fromVertexID, int toVertexID, int weight);
 
-// ����� ��ȿ�� ����.
 int checkVertexValid(ArrayGraph* pGraph, int vertexID);
-
-// ��� ����
 int removeVertexAG(ArrayGraph* pGraph, int vertexID);
 
-// ���� ����
 int removeEdgeAG(ArrayGraph* pGraph, int fromVertexID, int toVertexID);
 
-// �׷��� ���� ���
 void displayArrayGraph(ArrayGraph* pGraph);
 #endif
 
