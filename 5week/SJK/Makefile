@@ -5,7 +5,7 @@ test:
 	rm a.out
 leak:
 	gcc *.c
-	./a.out
+	leaks -atExit -- ./a.out
 	rm -rf a.out.dSYM
 	rm a.out
 .PHONY: test

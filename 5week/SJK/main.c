@@ -18,12 +18,9 @@ int main() {
 	//removeEdgeAG(udGraph, 2, 3);
 	//displayArrayGraph(udGraph);
 	
-	//deleteArrayGraph(udGraph);
-	//udGraph = NULL;
-	// // while(1)
-	// // {
-		
-	// // }
-	system("leaks -atExit -- ./a.out");
+	deleteArrayGraph(udGraph);
+	deleteArrayGraph(dGraph);
+	udGraph = NULL;
+
 	return 0;
 }
