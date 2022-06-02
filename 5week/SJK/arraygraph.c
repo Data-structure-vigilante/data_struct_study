@@ -107,6 +107,7 @@ void deleteArrayGraph(ArrayGraph *pGraph) {
     i = 0;
     while (i < pGraph->maxVertexCount) {
         free(pGraph->ppAdjEdge[i]);
+		++i;
     }
     free(pGraph->ppAdjEdge);
     free(pGraph->pVertex);
@@ -123,15 +124,15 @@ void displayArrayGraph(ArrayGraph *pGraph) {
     i = 0;
     printf("    ");
     while (i < pGraph->maxVertexCount) {
-        printf("  %03d ", i++);
+        printf("  %3d ", i++);
     }
     printf(" \n");
     i = 0;
     while (i < pGraph->maxVertexCount) {
         j = 0;
-        printf("%03d ", i);
+        printf("%3d ", i);
         while (j < pGraph->maxVertexCount) {
-            printf("| %03d ", pGraph->ppAdjEdge[i][j]);
+            printf("| %3d ", pGraph->ppAdjEdge[i][j]);
             ++j;
         }
         printf("|\n");
