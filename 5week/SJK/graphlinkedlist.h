@@ -4,14 +4,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
-typedef struct ArrayGraphType
-{
-	int maxVertexCount;
-	int currentVertexCount;
-	int graphType;
-	int **ppAdjEdge;
-	int *pVertex;
-} ArrayGraph;
 typedef struct GraphVertexType
 {
 	int vertexID;
@@ -33,6 +25,7 @@ typedef struct LinkedListType
 LinkedList *createLinkedList();
 int addLLElement(LinkedList *pList, int position, ListNode element);
 int removeLLElement(LinkedList *pList, int position);
+int findLLElement(LinkedList *pList,  int vertexId);
 ListNode *getLLElement(LinkedList *pList, int position);
 
 void clearLinkedList(LinkedList *pList);

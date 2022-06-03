@@ -17,15 +17,6 @@ typedef struct LinkedListType
 	ListNode headerNode;
 } LinkedList;
 
-typedef struct ArrayGraphType
-{
-	int maxVertexCount;
-	int currentVertexCount;
-	int graphType;
-	int **ppAdjEdge;
-	int *pVertex;
-} ArrayGraph;
-
 LinkedList *createLinkedList()
 {
 }
@@ -88,6 +79,26 @@ int removeLLElement(LinkedList *pList, int position)
 	free(target_node);
 	--pList->currentElementCount;
 	return position;
+}
+
+int findLLElement(LinkedList *pList, int vertexId) {
+	int i;
+	ListNode *currentNode;
+
+	if (pList == NULL)
+		return -1;
+
+	i = 0;
+	currentNode = pList->headerNode.pLink;
+	while (i < pList->currentElementCount) {
+		if (currentNode->data.vertexID == vertexId)
+			break;
+		currentNode = currentNode->pLink;
+		++i;
+	}
+	if (currentNode == NULL)
+		return -1;
+	return i;
 }
 
 ListNode *getLLElement(LinkedList *pList, int position)
