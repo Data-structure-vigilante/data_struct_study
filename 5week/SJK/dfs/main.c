@@ -1,13 +1,14 @@
 #include "dfs.h"
 #include "../linkedGraph/linkedlistgraph.h"
 
-int main() {
-	ListGraph* dGraph = createListDirectedGraph(6);
+int main()
+{
+	ListGraph *dGraph = createListDirectedGraph(6);
 
-	for(int i = 0; i < 7; ++i)
+	for (int i = 0; i < 7; ++i)
 		addVertexLG(dGraph, i);
-	addEdgeLG(dGraph, 0, 1);
 	addEdgeLG(dGraph, 0, 3);
+	addEdgeLG(dGraph, 0, 1);
 	addEdgeLG(dGraph, 1, 2);
 	addEdgeLG(dGraph, 1, 4);
 	addEdgeLG(dGraph, 2, 3);
@@ -17,7 +18,7 @@ int main() {
 	// removeVertexAG(dGraph, 2);
 	// removeEdgeAG(dGraph, 2, 3);
 	displayListGraph(dGraph);
-	findPath(dGraph, 0, 1);
+	findPath(dGraph, 2, 0);
 	deleteListGraph(dGraph);
 	dGraph = NULL;
 }
