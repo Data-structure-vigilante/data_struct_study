@@ -4,60 +4,67 @@
 
 int findPath(ListGraph *graph, int startVertexId, int goalVertexId)
 {
-	ArrayQueue *result;
-	int currentVertexCount = graph->currentVertexCount;
-	int *visited;
-	int isFound;
+	int *allPaths;
+	int i;
 
-	visited = (int *)calloc(currentVertexCount, sizeof(int));
-	result = createArrayStack(currentVertexCount);
-	isFound = NOT_FOUND;
-	dfs(graph, startVertexId, goalVertexId, visited, result, &isFound); // 종료 시, result에 최단 경로 다 담겨있음.
-	if (isArrayStackEmpty(result))
+	i = goalVertexId;
+	allPaths = getAllPaths(graph, startVertexId, goalVertexId);
+	if (allPaths[i] == -1)
 	{
-		printf("Path is not found\n");
-		free(visited);
-		deleteArrayStack(result);
-		return FAIL;
+		printf("No Path!+++++++++\n");
+		return (0);
 	}
-	else
+	printf("Path : ");
+	while (allPaths[i] != i)
 	{
-		while (isArrayStackEmpty(result) == FALSE)
-		{
-			printf(" %d", popLS(result)->data);
-			if (isArrayStackEmpty(result) == FALSE)
-				printf(" <-");
-		}
-		printf("\n");
-		free(visited);
-		deleteArrayStack(result);
-		return SUCCESS;
+		printf(" %d", i);
+		if (allPaths[i] == startVertexId)
+			break ;
+		else
+			i = allPaths[i];
 	}
+	printf("\n");
 }
-void bfs(ListGraph *graph, int startVertexId, int goalVertexId)
-{
-	ArrayQueue *queue;
-	ArrayQueueNode *node;
-	ListNode *candidate;
-	ArrayQueueNode element;
 
-	int *visited;
-	int currentVertexCount = graph->currentVertexCount;
+int *getAllPaths(ListGraph *graph, int startVertexId, int goalVertexId)
+{
+	ArrayQueue		*queue;
+	int				parentID;
+	ListNode		*candidate;
+	ArrayQueueNode	element;
+	int				*parentArray;
+	int				*visited;
+	int				currentVertexCount = graph->currentVertexCount;
+	//int				i = 0;
 
 	queue = createArrayQueue(currentVertexCount);
 	visited = (int *)calloc(currentVertexCount, sizeof(int));
+	parentArray = (int *)calloc(currentVertexCount, sizeof(int));
 	visited[startVertexId] = TRUE;
 	element.data = startVertexId;
+	parentArray[startVertexId] = startVertexId;
 	enqueueAQ(queue, element);
-	candidate = getLLElement(&graph->pAdjEdge[startVertexId], 0);
+	// while (i < currentVertexCount)
+	// {
+	// 	parentArray[i] = 
+	// }
 	while (!isArrayQueueEmpty(queue))
 	{
-		// while candidate의 인접 노드들
-		if (candidate != FALSE)
+		parentID = dequeueAQ(queue)->data;
+		candidate = getLLElement(&graph->pAdjEdge[parentID], 0);
+		while (candidate != NULL)
 		{
-			visited[candidate->data.vertexID] = TRUE;
-			enqueueAQ(queue, candidate);
+			if (visited[candidate->data.vertexID] == FALSE)
+			{
+				visited[candidate->data.vertexID] = TRUE;
+				parentArray[candidate->data.vertexID] = parentID;
+				element.data = candidate->data.vertexID;
+				enqueueAQ(queue, element);
+			}
+			candidate = candidate->pLink;
 		}
-		candidate = candidate->pLink;
 	}
+	deleteArrayQueue(queue);
+	free(visited);
+	return (parentArray);
 }
