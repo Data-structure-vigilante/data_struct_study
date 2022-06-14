@@ -1,4 +1,4 @@
-#include "dfs.h"
+#include "bfs.h"
 #include "../linkedGraph/linkedlistgraph.h"
 
 int main()
@@ -18,7 +18,7 @@ int main()
 	// removeVertexAG(dGraph, 2);
 	// removeEdgeAG(dGraph, 2, 3);
 	displayListGraph(dGraph);
-	findPath(dGraph, 2, 0);
+	findPath(dGraph,1, 3);
 	deleteListGraph(dGraph);
 	dGraph = NULL;
 }
