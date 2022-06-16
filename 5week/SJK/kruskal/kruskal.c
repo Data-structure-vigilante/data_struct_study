@@ -1,31 +1,34 @@
 #include "kruskal.h"
+#include <stdio.h>
+#include <stdlib.h>
 
-void set_init(int *parent, int *num, int n, edge_weight *info)
+void init_infos(edge_weight *infos)
 {
-	int		i;
+	int	i;
 
 	i = 0;
-	while (i < n)
+	while(i < 1000)
 	{
-		parent[i] = -1;
-		num[i] = 1;
+		infos[i].start = -1;
+		infos[i].end = -1;
+		infos[i].weight = 0;
 		++i;
-	}
-	i = 0;
-	while(i <= 1000)
-	{
-		info->start = -1;
-		info->end = -1;
-		info->weight = 0;
-	}
-	i = 0;
-	while(i < n - 1)
-	{
-
 	}
 }
 
-void get_info(edge_weight *info, ArrayGraph *graph)
+void init_parents(int *parents, int vertexCount)
+{
+	int	i;
+
+	i = 0;
+	while (i < vertexCount)
+	{
+		parents[i] = i;
+		++i;
+	}
+}
+
+void get_infos(edge_weight *infos, ArrayGraph *graph)
 {
 	int		a;
 	int		b;
@@ -40,30 +43,31 @@ void get_info(edge_weight *info, ArrayGraph *graph)
 		{
 			if (graph->ppAdjEdge[a][b] != 0)
 			{
-				info->start = a;
-				info->end = b;
-				info->weight = graph->ppAdjEdge[a][b];
+				infos->start = a;
+				infos->end = b;
+				infos->weight = graph->ppAdjEdge[a][b];
 				++count;
 			}
 			++b;
 		}
 		++a;
 	}
+	infos->edge_count = count;
 }
 
-void sort_info(edge_weight *info)
+void sort_infos(edge_weight *infos)
 {
 	int	temp;
 
-	for (int i = 0; i < info->edge_count - 1; i++)
+	for (int i = 0; i < infos->edge_count - 1; i++)
     {
-        for (int j = 0; j < info->edge_count - 1 - i; j++)
+        for (int j = 0; j < infos->edge_count - 1 - i; j++)
         {
-            if (info[j].weight > info[j + 1].weight)
+            if (infos[j].weight > infos[j + 1].weight)
             {
-                temp        = info[j].weight;
-                info[j].weight     = info[j + 1].weight;
-                info[j + 1].weight = temp;
+                temp        = infos[j].weight;
+                infos[j].weight     = infos[j + 1].weight;
+                infos[j + 1].weight = temp;
             }
         }
     }
@@ -79,27 +83,26 @@ int max(int a, int b)
 	return a > b ? a : b;
 }
 
-void	update_parent(edge_weight *info, int *parent_array, int vertex_count)
+void update_parents(edge_weight *infos, int *parents, int vertex_count)
 {
 	int big_parent;
 	int small_parent;
 	int	i;
 
-	small_parent = min(parent_array[info->start], parent_array[info->end]);
-	big_parent = max(parent_array[info->start], parent_array[info->end]);
+	small_parent = min(parents[infos->start], parents[infos->end]);
+	big_parent = max(parents[infos->start], parents[infos->end]);
 	i = 0;
 	while (i < vertex_count)
 	{
-		if (parent_array[i] == big_parent)
-			parent_array[i] = small_parent;
+		if (parents[i] == big_parent)
+			parents[i] = small_parent;
 		++i;
 	}
 }
 
-int is_cycle(edge_weight info, int *parent)
+int is_cycle(edge_weight infos, int *parents)
 {
-
-	if (parent[info.start] == parent[info.end])
+	if (parents[infos.start] == parents[infos.end])
 		return (TRUE);
 	else
 		return (FALSE);
@@ -108,44 +111,37 @@ int is_cycle(edge_weight info, int *parent)
 
 edge_weight *kruskal(ArrayGraph *graph)
 {
-	int		*parent;
+	int		*parents;
 	edge_weight	*result;
-	edge_weight *info;
+	edge_weight *infos;
 	int		a;
 	int		b;
 
-	parent = (int *)calloc(graph->maxVertexCount, sizeof(int));
-	info = (edge_weight *)calloc(1000, sizeof(edge_weight));
-	result = (edge_weight *)calloc(graph->currentVertexCount - 1, sizeof(int));
-	set_init(parent, num, graph->maxVertexCount, info);
-	get_info(info, graph); //간선과 가중치 정보 배열
-	sort_info(info); //간선 오름차순(가중치)정렬
+	parents = (int *)calloc(graph->maxVertexCount, sizeof(int));
+	infos = (edge_weight *)calloc(1000, sizeof(edge_weight));
+	result = (edge_weight *)calloc(graph->currentVertexCount - 1, sizeof(edge_weight));
+	init_infos(infos);
+	init_parents(parents, graph->currentVertexCount);
+	get_infos(infos, graph); //간선과 가중치 정보 배열
+	sort_infos(infos); //간선 오름차순(가중치)정렬
 
 	a = 0;
 	b = 0;
-	while(b < graph->currentVertexCount - 1 && a < info->edge_count)
+	while (b < graph->currentVertexCount - 1 && a < infos->edge_count)
 	{
-		if (!is_cycle(info[a], parent)) //->start end 부모(루트)가 같은지 확인
+		if (!is_cycle(infos[a], parents)) //->start end 부모(루트)가 같은지 확인
 		{
-			update_parent(&info[a], parent, graph->currentVertexCount);
-			result[b] = info[a];
+			update_parents(&infos[a], parents, graph->currentVertexCount);
+			result[b] = infos[a];
 			++b;
 		}
 		a++;
 	}
 	if (b != graph->currentVertexCount - 1)
 	{
-		printf("No PATH!!!!!!!");
-		return (NULL);
+		printf("No PATH!!!!!!!\n");
+		return (result);
 	}
-	printf("SUCCESS!!!");
+	printf("SUCCESS!!!\n");
 	return (result);
-}
-
-int main()
-{
-	ArrayGraph *graph;
-
-	graph = createListGraph(10);
-
 }

@@ -1,12 +1,13 @@
 SRC = main.c \
-			dfs.c \
-			../../../2week/SH/arrayStack/arraystack.c \
- 			../linkedGraph/linkedlistgraph.c \
-			../linkedGraph/graphlinkedlist.c
+ 			../arrayGraph/arraygraph.c \
+			 kruskal.c \
 
 all: ${SRC}
 	gcc -g3 -fsanitize=address ${SRC} -o main
 	./main
+
+debug: ${SRC}
+	gcc -g3 -fsanitize=address ${SRC} -o main
 
 leak:
 	gcc *.c
@@ -14,4 +15,4 @@ leak:
 	rm -rf a.out.dSYM
 	rm a.out
 
-.PHONY: test
+.PHONY: test debug

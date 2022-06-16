@@ -1,6 +1,4 @@
 #include "../arrayGraph/arraygraph.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 typedef struct edge_weight_type
 {
@@ -10,12 +8,13 @@ typedef struct edge_weight_type
 	int		edge_count;
 }				edge_weight;
 
-int set_find(int vertex, int *parent); // 부모찾기
+void init_infos(edge_weight *info);
 
-int	update_parent(edge_weight *info, int *parent, int vertex_id);
+void init_parents(int *parent, int vertexCount);
 
+void update_parents(edge_weight *infos, int *parents, int vertex_count);
 
+void get_infos(edge_weight *infos, ArrayGraph *graph);
 
 edge_weight *kruskal(ArrayGraph *graph);
 
-void set_init(int *parent, int *num, int n, edge_weight *info);
