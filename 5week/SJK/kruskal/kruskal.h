@@ -12,7 +12,9 @@ typedef struct edge_weight_type
 
 int set_find(int vertex, int *parent); // 부모찾기
 
-void set_union(edge_weight info); //집합 합치기
+int	update_parent(edge_weight *info, int *parent, int vertex_id);
+
+
 
 edge_weight *kruskal(ArrayGraph *graph);
 

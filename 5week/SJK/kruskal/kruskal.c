@@ -69,11 +69,37 @@ void sort_info(edge_weight *info)
     }
 }
 
+int min(int a, int b)
+{
+	return a < b ? a : b;
+}
+
+int max(int a, int b)
+{
+	return a > b ? a : b;
+}
+
+void	update_parent(edge_weight *info, int *parent_array, int vertex_count)
+{
+	int big_parent;
+	int small_parent;
+	int	i;
+
+	small_parent = min(parent_array[info->start], parent_array[info->end]);
+	big_parent = max(parent_array[info->start], parent_array[info->end]);
+	i = 0;
+	while (i < vertex_count)
+	{
+		if (parent_array[i] == big_parent)
+			parent_array[i] = small_parent;
+		++i;
+	}
+}
 
 int is_cycle(edge_weight info, int *parent)
 {
 
-	if (set_find(info.start, parent) == set_find(info.end, parent))
+	if (parent[info.start] == parent[info.end])
 		return (TRUE);
 	else
 		return (FALSE);
@@ -83,30 +109,31 @@ int is_cycle(edge_weight info, int *parent)
 edge_weight *kruskal(ArrayGraph *graph)
 {
 	int		*parent;
-	// int 	*num; //++++++++
 	edge_weight	*result;
 	edge_weight *info;
 	int		a;
 	int		b;
 
 	parent = (int *)calloc(graph->maxVertexCount, sizeof(int));
-	// num = (int *)calloc(graph->maxVertexCount, sizeof(int));
 	info = (edge_weight *)calloc(1000, sizeof(edge_weight));
 	result = (edge_weight *)calloc(graph->currentVertexCount - 1, sizeof(int));
 	set_init(parent, num, graph->maxVertexCount, info);
 	get_info(info, graph); //간선과 가중치 정보 배열
 	sort_info(info); //간선 오름차순(가중치)정렬
 
+	a = 0;
+	b = 0;
 	while(b < graph->currentVertexCount - 1 && a < info->edge_count)
 	{
-		if ( ! (is_cycle(info[a]))) //->start end 부모(루트)가 같은지 확인
+		if (!is_cycle(info[a], parent)) //->start end 부모(루트)가 같은지 확인
 		{
-			set_union(info[a]);
+			update_parent(&info[a], parent, graph->currentVertexCount);
 			result[b] = info[a];
+			++b;
 		}
 		a++;
 	}
-	if (b != n - 1)
+	if (b != graph->currentVertexCount - 1)
 	{
 		printf("No PATH!!!!!!!");
 		return (NULL);
