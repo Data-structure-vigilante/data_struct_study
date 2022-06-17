@@ -2,20 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void init_infos(edge_weight *infos)
-{
-	int	i;
-
-	i = 0;
-	while(i < 1000)
-	{
-		infos[i].start = -1;
-		infos[i].end = -1;
-		infos[i].weight = 0;
-		++i;
-	}
-}
-
 void init_parents(int *parents, int vertexCount)
 {
 	int	i;
@@ -28,14 +14,17 @@ void init_parents(int *parents, int vertexCount)
 	}
 }
 
-void get_infos(edge_weight *infos, ArrayGraph *graph)
+edge_weight *get_infos(ArrayGraph *graph, int edge_count)
 {
 	int		a;
 	int		b;
+	int		c;
 	int		count;
+	edge_weight *infos;
 
+	infos = (edge_weight *)calloc(edge_count, sizeof(edge_weight));
 	a = 0;
-	count = 0;
+	c = 0;
 	while (a < graph->maxVertexCount)
 	{
 		b = a + 1;
@@ -43,35 +32,36 @@ void get_infos(edge_weight *infos, ArrayGraph *graph)
 		{
 			if (graph->ppAdjEdge[a][b] != 0)
 			{
-				infos->start = a;
-				infos->end = b;
-				infos->weight = graph->ppAdjEdge[a][b];
-				++count;
+				infos[c].start = a;
+				infos[c].end = b;
+				infos[c].weight = graph->ppAdjEdge[a][b];
+				++c;
 			}
 			++b;
 		}
 		++a;
 	}
-	infos->edge_count = count;
+	return (infos);
 }
 
-void sort_infos(edge_weight *infos)
+void sort_infos(edge_weight *infos, int edge_count)
 {
-	int	temp;
+	edge_weight temp;
 
-	for (int i = 0; i < infos->edge_count - 1; i++)
+    for (int i = 0; i < edge_count; i++)    // 요소의 개수만큼 반복
     {
-        for (int j = 0; j < infos->edge_count - 1 - i; j++)
+        for (int j = 0; j < edge_count - 1; j++)   // 요소의 개수 - 1만큼 반복
         {
-            if (infos[j].weight > infos[j + 1].weight)
-            {
-                temp        = infos[j].weight;
-                infos[j].weight     = infos[j + 1].weight;
-                infos[j + 1].weight = temp;
+            if (infos[j].weight > infos[j + 1].weight)          // 현재 요소의 값과 다음 요소의 값을 비교하여
+            {                                 // 큰 값을
+                temp = infos[j];
+                infos[j] = infos[j + 1];
+                infos[j + 1] = temp;            // 다음 요소로 보냄
             }
         }
     }
 }
+
 
 int min(int a, int b)
 {
@@ -109,6 +99,28 @@ int is_cycle(edge_weight infos, int *parents)
 
 }
 
+int	get_edge_count(ArrayGraph *graph)
+{
+	int a;
+	int b;
+	int count;
+
+	a = 0;
+	count = 0;
+	while (a < graph->maxVertexCount)
+	{
+		b = a + 1;
+		while (b < graph->maxVertexCount)
+		{
+			if (graph->ppAdjEdge[a][b] != 0)
+				++count;
+			++b;
+		}
+		++a;
+	}
+	return (count);
+}
+
 edge_weight *kruskal(ArrayGraph *graph)
 {
 	int		*parents;
@@ -116,18 +128,18 @@ edge_weight *kruskal(ArrayGraph *graph)
 	edge_weight *infos;
 	int		a;
 	int		b;
+	int		edge_count;
 
+	edge_count = get_edge_count(graph);
 	parents = (int *)calloc(graph->maxVertexCount, sizeof(int));
-	infos = (edge_weight *)calloc(1000, sizeof(edge_weight));
+	infos = get_infos(graph, edge_count);
 	result = (edge_weight *)calloc(graph->currentVertexCount - 1, sizeof(edge_weight));
-	init_infos(infos);
 	init_parents(parents, graph->currentVertexCount);
-	get_infos(infos, graph); //간선과 가중치 정보 배열
-	sort_infos(infos); //간선 오름차순(가중치)정렬
+	sort_infos(infos, edge_count); //간선 오름차순(가중치)정렬
 
 	a = 0;
 	b = 0;
-	while (b < graph->currentVertexCount - 1 && a < infos->edge_count)
+	while (b < graph->currentVertexCount - 1 && a < edge_count)
 	{
 		if (!is_cycle(infos[a], parents)) //->start end 부모(루트)가 같은지 확인
 		{

@@ -1,15 +1,17 @@
 #ifndef PRIM_H
-# include "../arrayGraph/arrayGraph.h"
+# include "../arrayGraph/arraygraph.h"
 
 # define INF 999
 
 int findMin(int *cost, int maxVertexCount);
 
-int fillResult(int **result, int *from, int min, int i);
+void fillResult(int **result, int *from, int min, int i);
 
-int **getSpanningTree(int currentVertexCount, int **adjEdges, \
-						int **result, int *from, int min,  \
+void	getSpanningTree(int maxVertexCount, int **adjEdges, \
+						int **result, int *from,  \
 						int *cost);
+
+void	switchZeroToInf(ArrayGraph *graph);
 
 int **prim(ArrayGraph *graph, int startVertex);
 

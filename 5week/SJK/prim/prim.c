@@ -3,43 +3,52 @@
 
 int findMin(int *cost, int maxVertexCount)
 {
-	int		min;
+	int		minIdx;
 	int		idx1;
 
-	min = INF;
+	minIdx = INF;
 	idx1 = 0;
 	while(idx1 < maxVertexCount)
 	{
-		if (cost[idx1] != 0 && cost[idx1] < min)
-			min = cost[idx1];
+		if (cost[idx1] != 0 && cost[idx1] < minIdx)
+			minIdx = cost[idx1];
 		++idx1;
 	}
-	return (min);
+	idx1 = 0;
+	while (idx1 < maxVertexCount)
+	{
+		if (cost[idx1] == minIdx)
+			break ;
+		++idx1;
+	}
+	return (idx1);
 }
 
-int fillResult(int **result, int *from, int min, int i)
+void fillResult(int **result, int *from, int minIdx, int i)
 {
-	result[0][i] = from[min];
-	result[1][i] = min;
+	result[0][i] = from[minIdx];
+	result[1][i] = minIdx;
 }
 
-int **getSpanningTree(int currentVertexCount, int **adjEdges, int **result, int *from, int min, int *cost)
+void	getSpanningTree(int maxVertexCount, int **adjEdges, int **result, int *from, int *cost)
 {
 	int i;
 	int j;
+	int minIdx;
 
 	i = 0;
-	while (i < currentVertexCount - 1)
+	while (i < maxVertexCount - 1)
 	{
-		fillResult(result, from, min, i);
-		cost[min] = 0;
-		j = 1;
-		while (j < currentVertexCount)
+		minIdx = findMin(cost, maxVertexCount);
+		fillResult(result, from, minIdx, i);
+		cost[minIdx] = 0;
+		j = 0;
+		while (j < maxVertexCount)
 		{
-			if (adjEdges[min][j] < cost[j])
+			if (adjEdges[minIdx][j] < cost[j])
 			{
-				from[j] = min;
-				cost[j] = adjEdges[min][j];
+				from[j] = minIdx;
+				cost[j] = adjEdges[minIdx][j];
 			}
 			++j;
 		}
@@ -47,6 +56,26 @@ int **getSpanningTree(int currentVertexCount, int **adjEdges, int **result, int 
 	}
 }
 
+void	switchZeroToInf(ArrayGraph *graph)
+{
+	int		i;
+	int		j;
+	int		**matrix;
+
+	matrix = graph->ppAdjEdge;
+	i = 0;
+	while (i < graph->maxVertexCount)
+	{
+		j = 0;
+		while (j < graph->maxVertexCount)
+		{
+			if (matrix[i][j] == 0 && i != j)
+				matrix[i][j] = INF;
+			++j;
+		}
+		++i;
+	}
+}
 int **prim(ArrayGraph *graph, int startVertex)
 {
 	int		*from;
@@ -55,10 +84,11 @@ int **prim(ArrayGraph *graph, int startVertex)
 	int		i;
 	int		maxVertexCount;
 	int		**adjEdges;
-	int		min;
+	int		minIdx;
 	int		j;
 
 	adjEdges = graph->ppAdjEdge;
+	switchZeroToInf(graph);
 	maxVertexCount = graph->maxVertexCount;
 	from = (int *)calloc(graph->maxVertexCount, sizeof(int));
 	cost = (int *)calloc(graph->maxVertexCount, sizeof(int));
@@ -69,17 +99,13 @@ int **prim(ArrayGraph *graph, int startVertex)
 
 	for (int i = 0; i < maxVertexCount; ++i)
 	{
-		from[i] = startVertex;
-		cost[i] = adjEdges[startVertex][i];
-		if (i != startVertex)
-			if (cost[i] == 0)
-				cost[i] == INF;
-		else
+		if (i == startVertex)
 			from[i] = 0;
+		else
+			from[i] = startVertex;
+		cost[i] = adjEdges[startVertex][i];
 	}
-	min = findMin(cost, maxVertexCount);
-	i = 0;
-	getSpanningTree(graph->currentVertexCount, adjEdges, \
-					result, from, min, cost);
+	getSpanningTree(maxVertexCount, adjEdges, \
+					result, from, cost);
 	return (result);
 }
