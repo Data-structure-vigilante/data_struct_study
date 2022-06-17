@@ -1,6 +1,5 @@
 #include "prim.h"
 #include <stdlib.h>
-#include <stdio.h>
 
 int findMin(int *cost, int maxVertexCount)
 {
@@ -18,7 +17,37 @@ int findMin(int *cost, int maxVertexCount)
 	return (min);
 }
 
-int prim(ArrayGraph *graph, int startVertex)
+int fillResult(int **result, int *from, int min, int i)
+{
+	result[0][i] = from[min];
+	result[1][i] = min;
+}
+
+int **getSpanningTree(int currentVertexCount, int **adjEdges, int **result, int *from, int min, int *cost)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (i < currentVertexCount - 1)
+	{
+		fillResult(result, from, min, i);
+		cost[min] = 0;
+		j = 1;
+		while (j < currentVertexCount)
+		{
+			if (adjEdges[min][j] < cost[j])
+			{
+				from[j] = min;
+				cost[j] = adjEdges[min][j];
+			}
+			++j;
+		}
+		++i;
+	}
+}
+
+int **prim(ArrayGraph *graph, int startVertex)
 {
 	int		*from;
 	int		*cost;
@@ -27,6 +56,7 @@ int prim(ArrayGraph *graph, int startVertex)
 	int		maxVertexCount;
 	int		**adjEdges;
 	int		min;
+	int		j;
 
 	adjEdges = graph->ppAdjEdge;
 	maxVertexCount = graph->maxVertexCount;
@@ -48,9 +78,8 @@ int prim(ArrayGraph *graph, int startVertex)
 			from[i] = 0;
 	}
 	min = findMin(cost, maxVertexCount);
-	if (min == INF)
-		printf("NO PATH!!\n");
-	result[0][i] = from[min];
-	result[1][i] = min;
-
+	i = 0;
+	getSpanningTree(graph->currentVertexCount, adjEdges, \
+					result, from, min, cost);
+	return (result);
 }
