@@ -22,11 +22,11 @@ int	main(void)
 
 	displayArrayGraph(udGraph);
 
-	result = prim(udGraph, 0);
+	// result = prim(udGraph, 4);
 	// if (result == NULL)
 	// 	return (0);
 	idx_for_result = 0;
-	result = prim(udGraph, 0);
+	result = prim(udGraph, 2);
 
 	while (idx_for_result < udGraph->maxVertexCount - 1)
 	{
@@ -40,6 +40,12 @@ int	main(void)
 
 	deleteArrayGraph(udGraph);
 	udGraph = NULL;
-
+	idx_for_result = 0;
+	while(idx_for_result < 2)
+	{
+		free(result[idx_for_result]);
+		++idx_for_result;
+	}
+	free(result);
 	return 0;
 }

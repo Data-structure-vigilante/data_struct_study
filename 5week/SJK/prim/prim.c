@@ -4,24 +4,21 @@
 int findMin(int *cost, int maxVertexCount)
 {
 	int		minIdx;
+	int		minValue;
 	int		idx1;
 
-	minIdx = INF;
+	minValue = INF;
 	idx1 = 0;
 	while(idx1 < maxVertexCount)
 	{
-		if (cost[idx1] != 0 && cost[idx1] < minIdx)
-			minIdx = cost[idx1];
+		if (cost[idx1] != 0 && cost[idx1] < minValue)
+		{
+			minValue = cost[idx1];
+			minIdx = idx1;
+		}
 		++idx1;
 	}
-	idx1 = 0;
-	while (idx1 < maxVertexCount)
-	{
-		if (cost[idx1] == minIdx)
-			break ;
-		++idx1;
-	}
-	return (idx1);
+	return (minIdx);
 }
 
 void fillResult(int **result, int *from, int minIdx, int i)
@@ -107,5 +104,7 @@ int **prim(ArrayGraph *graph, int startVertex)
 	}
 	getSpanningTree(maxVertexCount, adjEdges, \
 					result, from, cost);
+	free(from);
+	free(cost);
 	return (result);
 }

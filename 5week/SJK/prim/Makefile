@@ -10,9 +10,9 @@ debug: ${SRC}
 	gcc -g3 -fsanitize=address ${SRC} -o main
 
 leak:
-	gcc *.c
-	leaks -atExit -- ./a.out
-	rm -rf a.out.dSYM
-	rm a.out
+	gcc ${SRC} -o main
+	leaks -atExit -- ./main
+	rm -rf main.dSYM
+	rm main
 
 .PHONY: test debug
