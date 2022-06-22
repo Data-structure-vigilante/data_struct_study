@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 int findPath(ListGraph *graph, int startVertexId, int goalVertexId) {
     int *allPaths;
     int i;
