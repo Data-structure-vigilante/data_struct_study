@@ -33,15 +33,15 @@ int	main(void)
 	float start, end;
 	int size;
 
-	//size = 1000000;
 	size = 10;
-	
+	// size = 10;
+
 	arr = createBigArray(size);
-	//start = (float)clock()/CLOCKS_PER_SEC;
+	start = (float)clock()/CLOCKS_PER_SEC;
 
 	shell_sort(arr, size);
-	print_array(arr, size);
+	// print_array(arr, size);
 
-	//end = (float)clock()/CLOCKS_PER_SEC;
+	end = (float)clock()/CLOCKS_PER_SEC;
 	printf("\nTime : %f\n", end - start);
 }

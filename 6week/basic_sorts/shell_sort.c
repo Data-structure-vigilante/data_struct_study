@@ -20,18 +20,18 @@ static void	insertion_sort_gap(int *array_to_sort, int start, int end, int gap)
 	int from;
 	int to;
 
-	from = gap;
+	from = start + gap;
 	while (from <= end)
 	{
 		to = start;
 		while (to < from && to <= end)
 		{
 			if (array_to_sort[from] < array_to_sort[to])
-				break ;
-			to+= gap;
+			{
+				insert_element_gap(array_to_sort, from, to, gap);
+			}
+			to += gap;
 		}
-		if (to <= end)
-			insert_element_gap(array_to_sort, from, to, gap);
 		from += gap;
 	}
 }
