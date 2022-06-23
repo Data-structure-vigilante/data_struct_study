@@ -1,46 +1,57 @@
 #include "basic_sort.h"
 
-void	sh_insert_element(int *array_to_sort, int from, int to)
+static void	insert_element_gap(int *array_to_sort, int from, int to, int gap)
 {
 	int temp;
 	int i;
 
 	temp = array_to_sort[from];
-	i = from - 1;
+	i = from - gap;
 	while (i >= to)
 	{
-		array_to_sort[i + 1] = array_to_sort[i];
-		--i;
+		array_to_sort[i + gap] = array_to_sort[i];
+		i -= gap;
 	}
 	array_to_sort[to] = temp;
 }
 
-void	sh_insertion_sort(int *array_to_sort, int start, int size , int gap)
+static void	insertion_sort_gap(int *array_to_sort, int start, int end, int gap)
 {
-	//start idx 설정
-	int i;
-	int j;
+	int from;
+	int to;
 
-	i = 1;
-	while (i < size)
+	from = gap;
+	while (from <= end)
 	{
-		j = 0;
-		while (j < i)
+		to = start;
+		while (to < from && to <= end)
 		{
-			if (array_to_sort[i] < array_to_sort[j])
+			if (array_to_sort[from] < array_to_sort[to])
 				break ;
-			++j;
+			to+= gap;
 		}
-		insert_element(array_to_sort, i, j);
-		i += gap;
+		if (to <= end)
+			insert_element_gap(array_to_sort, from, to, gap);
+		from += gap;
 	}
 }
 
 void	shell_sort(int *arr_to_sort, int size)
 {
-	//gap 설정
+	int	gap;
+	int	start;
 
+	gap = size / 2;
 	while (gap >= 1)
-
-	//끝
+	{
+		if (gap % 2 == 0)
+			++gap;
+		start = 0;
+		while (start < gap)
+		{
+			insertion_sort_gap(arr_to_sort, start, size - 1, gap);
+			++start;
+		}
+		gap /= 2;
+	}
 }
