@@ -1,5 +1,7 @@
 #include "basic_sort.h"
 #include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
 
 void	print_array(int *array, int size)
 {
@@ -9,11 +11,35 @@ void	print_array(int *array, int size)
 	}
 }
 
+int *createBigArray(int size)
+{
+	int *arr;
+	int value;
+
+	value = size;
+	arr = (int *)calloc(size, sizeof(int));
+	for (int i = 0; i < size; ++i)
+	{
+		arr[i] = value;
+		--value;
+	}
+	return (arr);
+}
+
 int	main(void)
 {
-	int array_to_sort[10] = { 9, 3, 1, 4, 0 , 777, 7, 7, -2, -2147483648};
+	// int array_to_sort[10] = { 9, 3, 1, 4, 0 , 777, 7, 7, -2, -2147483648};
+	int *arr;
+	float start, end;
+	int size;
 
-	selection_sort(array_to_sort, 10);
-	print_array(array_to_sort, 10);
-	return (0);
+	size = 1000000;
+	arr = createBigArray(size);
+	start = (float)clock()/CLOCKS_PER_SEC;
+
+	insertion_sort(arr, size);
+	// print_array(arr, size);
+
+	end = (float)clock()/CLOCKS_PER_SEC;
+	printf("\nTime : %f\n", end - start);
 }

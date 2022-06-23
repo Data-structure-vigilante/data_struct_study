@@ -4,6 +4,8 @@
 # define MIN 2147483647
 
 void	selection_sort(int *array_to_sort, int size);
-void swap(int *array_to_sort, int i, int j);
+void	bubble_sort(int *array_to_sort, int size);
+void	insertion_sort(int *array_to_sort, int size);
+void	swap(int *array_to_sort, int i, int j);
 
 #endif
