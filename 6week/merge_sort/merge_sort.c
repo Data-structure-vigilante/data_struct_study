@@ -8,6 +8,8 @@ static void	merge(int *array_to_sort, int start, int end)
 	int	size_to_sort;
 	int	min;
 	int	result[end + 1];
+	int start_idx = start;
+
 
 	if (start == end)
 		return ;
@@ -16,7 +18,7 @@ static void	merge(int *array_to_sort, int start, int end)
 	result_idx = 0;
 	while (result_idx <= size_to_sort)
 	{
-		if (start > mid_idx || mid_idx > end)
+		if (start > mid_idx || mid_idx + 1> end)
 			break ;
 		else if (array_to_sort[start] <= array_to_sort[mid_idx + 1])
 			min = array_to_sort[start++];
@@ -27,13 +29,14 @@ static void	merge(int *array_to_sort, int start, int end)
 	while (result_idx <= size_to_sort)
 	{
 		if (start > mid_idx)
-			result[result_idx++] = array_to_sort[mid_idx++];
+			result[result_idx++] = array_to_sort[1 + mid_idx++];
 		else
 			result[result_idx++] = array_to_sort[start++];
 
 	}
-	for(int i = start; i <= size_to_sort; ++i)
-		array_to_sort[i] = result[i];
+	int j = 0;
+	for(int i = start_idx; j <= size_to_sort; ++i)
+		array_to_sort[i] = result[j++];
 }
 
 static void	devide_array(int *array_to_sort, int start, int end)
@@ -49,7 +52,7 @@ static void	devide_array(int *array_to_sort, int start, int end)
 }
 
 
-int	*merge_sort(int *array_to_sort, int size)
+void	merge_sort(int *array_to_sort, int size)
 {
 	devide_array(array_to_sort, 0, size - 1);
 }

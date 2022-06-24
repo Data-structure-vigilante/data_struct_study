@@ -33,13 +33,13 @@ int	main(void)
 	float start, end;
 	int size;
 
-	size = 100;
+	size = 10000;
 	// size = 10;
 
 	arr = createBigArray(size);
 	start = (float)clock()/CLOCKS_PER_SEC;
 
-	quick_sort(arr, 0, 99);
+	quick_sort(arr, 0, 9999);
 	print_array(arr, size);
 
 	end = (float)clock()/CLOCKS_PER_SEC;
