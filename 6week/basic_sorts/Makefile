@@ -2,7 +2,8 @@ SRC = main.c \
 		selection_sort.c \
 		bubble_sort.c \
 		insertion_sort.c \
-		shell_sort.c
+		shell_sort.c \
+		quick_sort.c
 
 all: ${SRC}
 	gcc -g3 -fsanitize=address ${SRC} -o main

@@ -8,5 +8,6 @@ void	bubble_sort(int *array_to_sort, int size);
 void	insertion_sort(int *array_to_sort, int size);
 void	swap(int *array_to_sort, int i, int j);
 void	shell_sort(int *arr_to_sort, int size);
+void	quick_sort(int *arr_to_sort, int start_idx, int end_idx);
 
 #endif
