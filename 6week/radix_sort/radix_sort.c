@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 typedef struct DequeNodeType {
-    char data;
+    int data;
     struct DequeNodeType *pRLink;
     struct DequeNodeType *pLLink;
 } DequeNode;
@@ -129,13 +129,10 @@ void	radix_sort(int *array_to_sort, int size)
 		}
 		i *= 10;
 	}
-	printf("hi");
-	// int	*temp_swap;
 	i = 0;
 	while (i < size)
 	{
 		array_to_sort[i] = temp_array[i];
 		++i;
 	}
-	// temp_array = NULL;
 }
