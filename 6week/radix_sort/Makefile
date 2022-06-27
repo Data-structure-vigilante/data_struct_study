@@ -1,5 +1,5 @@
 SRC = main.c \
-		merge_sort.c
+		radix_sort.c
 
 all: ${SRC}
 	gcc -g3 -fsanitize=address ${SRC} -o main

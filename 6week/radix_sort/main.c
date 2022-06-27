@@ -1,4 +1,4 @@
-#include "merge_sort.h"
+#include "radix_sort.h"
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
@@ -33,14 +33,14 @@ int	main(void)
 	float start, end;
 	int size;
 
-	size = 100000;
+	size = 129;
 	// size = 10;
 
 	arr = createBigArray(size);
 	start = (float)clock()/CLOCKS_PER_SEC;
 
-	merge_sort(arr, size);
-	// print_array(arr, size);
+	radix_sort(arr, size);
+	print_array(arr, size);
 
 	end = (float)clock()/CLOCKS_PER_SEC;
 	printf("\nTime : %f\n", end - start);
