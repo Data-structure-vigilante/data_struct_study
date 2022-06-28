@@ -31,10 +31,11 @@ int	*createRandomArray(int size)
 	int *arr;
 	int value;
 
+	srand(time(NULL));
 	arr = (int *)calloc(size, sizeof(int));
 	for (int i = 0; i < size; ++i)
 	{
-		value = rand() % 100;
+		value = rand() % 10000;
 		arr[i] = value;
 	}
 	return (arr);
@@ -42,8 +43,8 @@ int	*createRandomArray(int size)
 
 int	main(void)
 {
-	int array_to_sort[10] = { 9, 3, 1, 4, 0 , 777, 7, 7, -2, -2147483648};
-	
+	int array_to_sort[10] = {9, 3, 1, 4, 0, 777, 7, 7, -2, -2147483648};
+
 	int *arr;
 	float start, end;
 	int size;
@@ -51,7 +52,7 @@ int	main(void)
 	size = 100;
 	// size = 10;
 
-	//arr = createBigArray(size);
+	// arr = createBigArray(size);
 	arr = createRandomArray(size);
 	start = (float)clock()/CLOCKS_PER_SEC;
 
